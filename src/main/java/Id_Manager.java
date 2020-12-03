@@ -1,12 +1,18 @@
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * A user is given an id by retrieving the localhost @ip.
+ * This @ is converted into a string.
+ */
 public class Id_Manager {
 
     private String id;
 
 
-    //Retrieve localhost @IP and convert it as a String
+    /**
+     * Id_Manager default constructor
+     */
     Id_Manager() {
         InetAddress ip = null;
         try {
