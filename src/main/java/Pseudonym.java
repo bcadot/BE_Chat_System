@@ -12,7 +12,7 @@ public class Pseudonym {
     /**
      * Pseudonym default constructor
      */
-    Pseudonym(){
+    Pseudonym() {
         Id_Manager id = new Id_Manager();
         this.pseudonym = id.getId();
     }
@@ -20,7 +20,7 @@ public class Pseudonym {
     /**
      * Set pseudonym.
      *
-     * @param   pseudo  The pseudonym you want
+     * @param pseudo The pseudonym you want
      */
     public void setPseudonym(String pseudo) {
         if (validatePseudonym(pseudo)) {
@@ -38,8 +38,8 @@ public class Pseudonym {
     /**
      * Check whether the given pseudonym is valid or not.
      *
-     * @param   pseudonym   the pseudonym you want to check
-     * @return              true if the given pseudonym is valid
+     * @param pseudonym the pseudonym you want to check
+     * @return true if the given pseudonym is valid
      */
     public Boolean validatePseudonym(String pseudonym) {
         Message pseudo = new Message(pseudonym, "BroadcastValidate");
@@ -47,10 +47,9 @@ public class Pseudonym {
         UDP_Serv serv = new UDP_Serv(this);
 
         //Send pseudo in broadcast UDP
-        try{
+        try {
             net.broadcastMessage(pseudo);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Error during broadcast transmission");
         }
 

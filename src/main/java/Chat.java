@@ -2,18 +2,26 @@
  * Represents a conversation between 2 or more users in which you can send or receive messages.
  */
 public class Chat {
-    private User user;
+    private Network_Manager User;
+    private String ipDest;
     private String history;
-    //TODO History
+    //private int unicast = 0;
+    //private int broadcast = 0;
+    //private int multicast = 0;
 
-    public void startSession(User user) {
-        //first : establish a TCP connection between 2 users
-        //later : multicast between several users
-
-        //fetch history
+    public Chat() {
+        //this.broadcast = 1;
+        //TODO gérer broadcast
     }
 
-    public void endSession() {
-        //fin ack
+    public Chat(User dest) {
+        //this.unicast = 1;
+        //TODO gérer unicast
     }
+
+    public Chat(User... users) {
+        //this.multicast = 1;
+        //TODO gérer multicast
+    }
+
 }

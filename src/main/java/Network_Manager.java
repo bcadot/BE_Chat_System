@@ -1,5 +1,5 @@
 /**
- * Manage to send and receive messages.
+ * Manager to send and receive messages.
  */
 
 import java.io.ByteArrayOutputStream;
