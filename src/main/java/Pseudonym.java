@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.util.Date;
+
 
 /**
  * A user can choose a pseudonym. It can be changed whenever the user wants to. There can not be two identical
@@ -42,22 +42,22 @@ public class Pseudonym {
      * @return              true if the given pseudonym is valid
      */
     public Boolean validatePseudonym(String pseudonym) {
+        Message pseudo = new Message(pseudonym, "BroadcastValidate");
         Network_Manager net = new Network_Manager();
-        Boolean valid = true;
+        UDP_Serv serv = new UDP_Serv(this);
 
         //Send pseudo in broadcast UDP
         try{
-            net.broadcastPseudonym(pseudonym);
+            net.broadcastMessage(pseudo);
         }
         catch(IOException e){
             System.out.println("Error during broadcast transmission");
         }
 
-        //TODO finir l'attente de réponses
-        Thread wait_for_answer = new Thread(net);
+        Thread wait_for_answer = new Thread(serv);
         wait_for_answer.start();
 
-        return valid;
+        return serv.isAnswer_received();
     }
 
 }
