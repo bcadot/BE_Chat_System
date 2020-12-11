@@ -56,7 +56,13 @@ public class Pseudonym {
         Thread wait_for_answer = new Thread(serv);
         wait_for_answer.start();
 
-        return serv.isAnswer_received();
+        return !serv.isAnswer_received();
+    }
+
+    //TODO : envoi du string représentant un user, refaire comme au dessus à peu près
+    public void notifyUsers(){
+
+
     }
 
 }

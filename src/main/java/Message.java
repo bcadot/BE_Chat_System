@@ -8,7 +8,7 @@ public class Message implements Serializable {
 
     //Attributes
     private String message;
-    private String type; //notifyPseudonym | requestValidatePseudonym | answerValidatePseudonym | Chat | File
+    private String type; //notificationPseudonym | requestValidatePseudonym | answerValidatePseudonym | Chat | File
     private Timestamp timestamp;
 
     public Message(String message, String type){
