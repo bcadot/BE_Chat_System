@@ -1,6 +1,5 @@
 import java.io.IOException;
 
-
 /**
  * A user can choose a pseudonym. It can be changed whenever the user wants to. There can not be two identical
  * pseudonyms.
@@ -8,6 +7,7 @@ import java.io.IOException;
 public class Pseudonym {
     //Attributes
     private String pseudonym;
+    private User user;
 
     /**
      * Pseudonym default constructor
@@ -43,8 +43,8 @@ public class Pseudonym {
      */
     public Boolean validatePseudonym(String pseudonym) {
         Message pseudo = new Message(pseudonym, "BroadcastValidate");
-        Network_Manager net = new Network_Manager();
-        UDP_Serv serv = new UDP_Serv(this);
+        Network_Manager net = this.user.getChat().getNetwork();
+        UDP_Serv serv = this.user.getChat().getNetwork().getBdServer();
 
         //Send pseudo in broadcast UDP
         try {
@@ -59,10 +59,19 @@ public class Pseudonym {
         return !serv.isAnswer_received();
     }
 
-    //TODO : envoi du string représentant un user, refaire comme au dessus à peu près
+    /**
+     * Notify other active users that the current user has been changed.
+     */
     public void notifyUsers(){
+        Message newUser = new Message(this.user);
+        Network_Manager net = this.user.getChat().getNetwork();
 
-
+        //Send pseudo in broadcast UDP
+        try {
+            net.broadcastMessage(newUser);
+        } catch (IOException e) {
+            System.out.println("Error during broadcast transmission");
+        }
     }
 
 }

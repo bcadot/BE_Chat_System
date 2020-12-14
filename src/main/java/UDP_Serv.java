@@ -15,7 +15,7 @@ public class UDP_Serv implements Runnable {
     public static int port = 1234;
     private Pseudonym pseudo;
 
-    public Network_Manager network;
+    private Network_Manager network;
 
     UDP_Serv(Pseudonym pseudo) {
         this.answer_received = true;
@@ -25,6 +25,7 @@ public class UDP_Serv implements Runnable {
     public boolean isAnswer_received() {
         return answer_received;
     }
+    public Network_Manager getNetwork() { return network; }
 
 
     public void run() {
@@ -95,18 +96,14 @@ public class UDP_Serv implements Runnable {
 
                 //TODO : traitement réception notifyUsers
                 case "notificationPseudonym":
-                    //on peut sûrement l'optimiser en supprimant le if else
-                    // et en utilisant seulement le try catch
-                    if (this.network.chat.user.getUsers().isknown(msg.getUser().getIp())) {
-                        //user connu : on supprime l'ancien user associé puis on le rajoute avec le nouveau pseudo
-                        try {
-                            this.network.chat.user.getUsers().delUserfromIP(msg.getUser().getIp());
-                            this.network.chat.user.getUsers().addUser(msg.getUser());
-                        }
-                        catch(FindException e) { System.err.println("Cannot del this user, not in the list"); }
+                    //user connu : on supprime l'ancien user associé puis on le rajoute avec le nouveau pseudo
+                    try {
+                        this.network.getChat().getUser().getUsers().delUserfromIP(msg.getUser().getIp());
+                        this.network.getChat().getUser().getUsers().addUser(msg.getUser());
                     }
-                    else
-                        this.network.chat.user.getUsers().addUser(msg.getUser());
+                    catch(FindException e) {
+                        this.network.getChat().getUser().getUsers().addUser(msg.getUser());
+                    }
             }
         }
     }

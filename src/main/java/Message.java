@@ -21,11 +21,7 @@ public class Message implements Serializable {
         this.type = "notificationPseudonym";
     }
 
-    public String getMessage() {
-        return message;
-    }
-    public String getType() {
-        return type;
-    }
+    public String getMessage() { return message; }
+    public String getType() { return type; }
     public User getUser() { return user; }
 }

@@ -10,8 +10,8 @@ import java.net.*;
 public class Network_Manager {
     private InetAddress ip;
 
-    public Chat chat;
-    public UDP_Serv bdServer;
+    private Chat chat;
+    private UDP_Serv bdServer;
 
     /**
      * Default constructor, retrieve localhost @ip.
@@ -72,10 +72,7 @@ public class Network_Manager {
         socket.close();
     }
 
-
-
-
-    public InetAddress getIp() {
-        return ip;
-    }
+    public InetAddress getIp() { return ip; }
+    public Chat getChat() { return chat; }
+    public UDP_Serv getBdServer() { return bdServer; }
 }

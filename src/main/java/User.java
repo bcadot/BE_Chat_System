@@ -15,7 +15,7 @@ public class User {
     private String name = pseudo.getPseudonym();
 
     //This a Chat class
-    public Chat chat = new Chat();
+    private Chat chat = new Chat();
 
     /**
      * User constructor, used to add new users to the list of active users.
@@ -47,4 +47,5 @@ public class User {
         return name;
     }
     public User_Manager getUsers() { return users; }
+    public Chat getChat() { return chat; }
 }
