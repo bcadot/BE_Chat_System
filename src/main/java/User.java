@@ -4,6 +4,7 @@
 public class User {
     //TODO list attributes
 
+
     //The following attributes are managers for the User class.
     private Id_Manager id = new Id_Manager();
     private Pseudonym pseudo = new Pseudonym();
@@ -27,6 +28,15 @@ public class User {
         this.ip = ip;
         this.rcvPort = port;
         this.name = name;
+        this.id = new Id_Manager();
+        this.pseudo = new Pseudonym();
+        this.users = new User_Manager();
+    }
+
+    public User() {
+        this.id = new Id_Manager();
+        this.pseudo = new Pseudonym();
+        this.users = new User_Manager();
     }
 
     public void startSession(User user) {
@@ -48,4 +58,5 @@ public class User {
     }
     public User_Manager getUsers() { return users; }
     public Chat getChat() { return chat; }
+    public Id_Manager getId() { return id; }
 }

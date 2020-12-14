@@ -13,7 +13,7 @@ public class Pseudonym {
      * Pseudonym default constructor
      */
     Pseudonym() {
-        Id_Manager id = new Id_Manager();
+        Id_Manager id = this.user.getId();
         this.pseudonym = id.getId();
     }
 
@@ -22,13 +22,14 @@ public class Pseudonym {
      *
      * @param pseudo The pseudonym you want
      */
-    public void setPseudonym(String pseudo) {
+    public boolean setPseudonym(String pseudo) {
+        boolean pseudoChanged = false;
         if (validatePseudonym(pseudo)) {
             pseudonym = pseudo;
-            //TODO Include notifyUsers()
-        } else {
-            //Pseudo non valide
+            pseudoChanged = true;
+            notifyUsers();
         }
+        return pseudoChanged;
     }
 
     public String getPseudonym() {
