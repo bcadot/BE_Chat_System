@@ -14,6 +14,9 @@ public class User {
     private int rcvPort = 1234; //TODO déterminer le port d'écoute attribué à un user
     private String name = pseudo.getPseudonym();
 
+    //This a Chat class
+    public Chat chat = new Chat();
+
     /**
      * User constructor, used to add new users to the list of active users.
      * @param ip the ip address
@@ -43,4 +46,5 @@ public class User {
     public String getName() {
         return name;
     }
+    public User_Manager getUsers() { return users; }
 }

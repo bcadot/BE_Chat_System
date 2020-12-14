@@ -2,12 +2,14 @@
  * Represents a conversation between 2 or more users in which you can send or receive messages.
  */
 public class Chat {
-    private Network_Manager User;
+    public Network_Manager network;
     private String ipDest;
     private String history;
     //private int unicast = 0;
     //private int broadcast = 0;
     //private int multicast = 0;
+
+    public User user;
 
     public Chat() {
         //this.broadcast = 1;

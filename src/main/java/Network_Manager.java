@@ -10,6 +10,9 @@ import java.net.*;
 public class Network_Manager {
     private InetAddress ip;
 
+    public Chat chat;
+    public UDP_Serv bdServer;
+
     /**
      * Default constructor, retrieve localhost @ip.
      */

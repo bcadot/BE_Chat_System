@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.module.FindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -13,6 +14,8 @@ public class UDP_Serv implements Runnable {
     private boolean answer_received = false;
     public static int port = 1234;
     private Pseudonym pseudo;
+
+    public Network_Manager network;
 
     UDP_Serv(Pseudonym pseudo) {
         this.answer_received = true;
@@ -92,7 +95,18 @@ public class UDP_Serv implements Runnable {
 
                 //TODO : traitement réception notifyUsers
                 case "notificationPseudonym":
-
+                    //on peut sûrement l'optimiser en supprimant le if else
+                    // et en utilisant seulement le try catch
+                    if (this.network.chat.user.getUsers().isknown(msg.getUser().getIp())) {
+                        //user connu : on supprime l'ancien user associé puis on le rajoute avec le nouveau pseudo
+                        try {
+                            this.network.chat.user.getUsers().delUserfromIP(msg.getUser().getIp());
+                            this.network.chat.user.getUsers().addUser(msg.getUser());
+                        }
+                        catch(FindException e) { System.err.println("Cannot del this user, not in the list"); }
+                    }
+                    else
+                        this.network.chat.user.getUsers().addUser(msg.getUser());
             }
         }
     }

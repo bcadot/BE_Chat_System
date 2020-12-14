@@ -8,6 +8,7 @@ public class Message implements Serializable {
 
     //Attributes
     private String message;
+    private User user;
     private String type; //notificationPseudonym | requestValidatePseudonym | answerValidatePseudonym | Chat | File
     private Timestamp timestamp;
 
@@ -15,16 +16,16 @@ public class Message implements Serializable {
         this.message = message;
         this.type = type;
     }
+    public Message(User u) {
+        this.user = u;
+        this.type = "notificationPseudonym";
+    }
 
     public String getMessage() {
         return message;
     }
-
     public String getType() {
         return type;
     }
-
-    public String toString(){
-        return message;
-    }
+    public User getUser() { return user; }
 }
