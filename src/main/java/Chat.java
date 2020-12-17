@@ -1,5 +1,5 @@
 /**
- * Represents a conversation between 2 or more users in which you can send or receive messages.
+ * Represents what you need to establish a communication : a network manager and a data manager
  */
 public class Chat {
     private Network_Manager network;
@@ -10,7 +10,7 @@ public class Chat {
     //private int multicast = 0;
 
     private User user;
-
+    /*
     public Chat() {
         //this.broadcast = 1;
         //TODO gérer broadcast
@@ -24,6 +24,13 @@ public class Chat {
     public Chat(User... users) {
         //this.multicast = 1;
         //TODO gérer multicast
+    }
+    */
+
+    public Chat(User u) {
+        this.user = u;
+        this.network = new Network_Manager(this);
+        this.data = new Data_Manager(this);
     }
 
     public User getUser() { return user; }

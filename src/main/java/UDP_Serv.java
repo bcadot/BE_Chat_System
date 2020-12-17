@@ -17,9 +17,10 @@ public class UDP_Serv implements Runnable {
 
     private Network_Manager network;
 
-    UDP_Serv(Pseudonym pseudo) {
+    UDP_Serv(Pseudonym pseudo, Network_Manager n) {
         this.answer_received = true;
         this.pseudo = pseudo;
+        this.network = n;
     }
 
     public boolean isAnswer_received() {

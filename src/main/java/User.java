@@ -6,17 +6,17 @@ public class User {
 
 
     //The following attributes are managers for the User class.
-    private Id_Manager id = new Id_Manager();
-    private Pseudonym pseudo = new Pseudonym();
-    private User_Manager users = new User_Manager(); //TODO gérer cette classe
+    private Id_Manager id;
+    private Pseudonym pseudo;
+    private User_Manager users; //TODO gérer cette classe
 
     //The following attributes are determined by the previous managers and will be the ones used.
     private String ip = id.getId();
-    private int rcvPort = 1234; //TODO déterminer le port d'écoute attribué à un user
+    private int rcvPort = 1234; //TODO déterminer le port d'écoute attribué à un user --> classe server
     private String name = pseudo.getPseudonym();
 
     //This a Chat class
-    private Chat chat = new Chat();
+    private Chat chat;
 
     /**
      * User constructor, used to add new users to the list of active users.
@@ -28,17 +28,15 @@ public class User {
         this.ip = ip;
         this.rcvPort = port;
         this.name = name;
-        this.id = new Id_Manager();
-        this.pseudo = new Pseudonym();
-        this.users = new User_Manager();
     }
 
     public User() {
         this.id = new Id_Manager();
         this.pseudo = new Pseudonym();
         this.users = new User_Manager();
+        this.chat = new Chat(this);
     }
-
+    /*
     public void startSession(User user) {
         Chat chat = new Chat(user);
     }
@@ -46,16 +44,10 @@ public class User {
     public void endSession() {
         //fin ack
     }
-
-    public String getIp() {
-        return ip;
-    }
-    public int getRcvPort() {
-        return rcvPort;
-    }
-    public String getName() {
-        return name;
-    }
+    */
+    public String getIp() { return ip; }
+    public int getRcvPort() { return rcvPort; }
+    public String getName() { return name; }
     public User_Manager getUsers() { return users; }
     public Chat getChat() { return chat; }
     public Id_Manager getId() { return id; }

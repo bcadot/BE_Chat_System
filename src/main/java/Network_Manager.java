@@ -1,5 +1,5 @@
 /**
- * Manager to send and receive messages.
+ * Manager to send and receive messages via sub classes.
  */
 
 import java.io.ByteArrayOutputStream;
@@ -16,7 +16,8 @@ public class Network_Manager {
     /**
      * Default constructor, retrieve localhost @ip.
      */
-    Network_Manager(){
+    Network_Manager(Chat c){
+        this.chat = c;
         try {
             this.ip =  InetAddress.getLocalHost();
         }
