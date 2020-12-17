@@ -1,7 +1,9 @@
+import java.io.Serializable;
+
 /**
  * Represents a user.
  */
-public class User {
+public class User implements Serializable {
     //TODO list attributes
 
 
@@ -11,9 +13,9 @@ public class User {
     private User_Manager users; //TODO gérer cette classe
 
     //The following attributes are determined by the previous managers and will be the ones used.
-    private String ip = id.getId();
+    private String ip;
     private int rcvPort = 1234; //TODO déterminer le port d'écoute attribué à un user --> classe server
-    private String name = pseudo.getPseudonym();
+    private String name;
 
     //This a Chat class
     private Chat chat;
@@ -31,10 +33,12 @@ public class User {
     }
 
     public User() {
-        this.id = new Id_Manager();
-        this.pseudo = new Pseudonym();
-        this.users = new User_Manager();
+        this.id = new Id_Manager(this);
+        this.pseudo = new Pseudonym(this);
+        this.users = new User_Manager(this);
         this.chat = new Chat(this);
+        this.ip = id.getId();
+        this.name = pseudo.getPseudonym();
     }
     /*
     public void startSession(User user) {

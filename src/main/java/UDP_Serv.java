@@ -10,17 +10,16 @@ import java.net.SocketException;
  */
 
 
-public class UDP_Serv implements Runnable {
+public class UDP_Serv implements Runnable, Serializable {
     private boolean answer_received = false;
     public static int port = 1234;
-    private Pseudonym pseudo;
+    private String name;
 
     private Network_Manager network;
 
-    UDP_Serv(Pseudonym pseudo, Network_Manager n) {
-        this.answer_received = true;
-        this.pseudo = pseudo;
+    UDP_Serv(/*Pseudonym pseudo, */Network_Manager n) {
         this.network = n;
+        this.name = this.network.getChat().getUser().getName();
     }
 
     public boolean isAnswer_received() {
@@ -68,7 +67,7 @@ public class UDP_Serv implements Runnable {
             switch (msgType) {
                 //TODO : changer l'envoi actuel par un envoi de type Message avec le flag answerValidatePseudonym
                 case "requestValidatePseudonym":
-                    if (msg.getMessage() == this.pseudo.getPseudonym()) {
+                    if (msg.getMessage().equals(this.name)) {
                         Message answer = new Message("Pseudo already used", "answerValidatePseudonym");
 
                         //Transformation of object Message into array of bytes

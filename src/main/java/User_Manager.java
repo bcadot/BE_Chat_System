@@ -1,10 +1,14 @@
+import java.io.Serializable;
 import java.lang.module.FindException;
 import java.util.ArrayList;
 
-public class User_Manager {
+public class User_Manager implements Serializable {
     private ArrayList<User> activeUsers = new ArrayList<User>();
+    private User user;
 
-    public User_Manager() { }
+    public User_Manager(User u) {
+        this.user = u;
+    }
 
     public void addUser(User u) {
         activeUsers.add(u);

@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -5,15 +6,17 @@ import java.net.UnknownHostException;
  * A user is given an id by retrieving the localhost @ip.
  * This @ is converted into a string.
  */
-public class Id_Manager {
+public class Id_Manager implements Serializable {
+
 
     private String id;
-
+    private User user;
 
     /**
      * Id_Manager default constructor
      */
-    Id_Manager() {
+    Id_Manager(User u) {
+        this.user = u;
         InetAddress ip = null;
         try {
             ip =  InetAddress.getLocalHost();

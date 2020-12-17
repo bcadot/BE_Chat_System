@@ -1,10 +1,11 @@
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * A user can choose a pseudonym. It can be changed whenever the user wants to. There can not be two identical
  * pseudonyms.
  */
-public class Pseudonym {
+public class Pseudonym implements Serializable {
     //Attributes
     private String pseudonym;
     private User user;
@@ -12,7 +13,8 @@ public class Pseudonym {
     /**
      * Pseudonym default constructor
      */
-    Pseudonym() {
+    Pseudonym(User u) {
+        this.user = u;
         Id_Manager id = this.user.getId();
         this.pseudonym = id.getId();
     }
@@ -44,7 +46,7 @@ public class Pseudonym {
      * @return true if the given pseudonym is valid
      */
     public Boolean validatePseudonym(String pseudonym) {
-        Message pseudo = new Message(pseudonym, "BroadcastValidate");
+        Message pseudo = new Message(pseudonym, "requestValidatePseudonym");
         Network_Manager net = this.user.getChat().getNetwork();
         UDP_Serv serv = this.user.getChat().getNetwork().getBdServer();
 

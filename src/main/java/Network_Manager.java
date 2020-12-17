@@ -5,9 +5,10 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.*;
 
-public class Network_Manager {
+public class Network_Manager implements Serializable {
     private InetAddress ip;
 
     private Chat chat;
@@ -18,6 +19,7 @@ public class Network_Manager {
      */
     Network_Manager(Chat c){
         this.chat = c;
+        this.bdServer = new UDP_Serv(this);
         try {
             this.ip =  InetAddress.getLocalHost();
         }
@@ -57,7 +59,7 @@ public class Network_Manager {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try{
             ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(broadcastMessage);
+            oos.writeObject(broadcastMessage); //TODO pb here
         } catch(IOException e){
             System.err.println("Error during serialisation : " + e);
         }
