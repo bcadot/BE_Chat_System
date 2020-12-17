@@ -21,6 +21,7 @@ public class Pseudonym {
      * Set pseudonym.
      *
      * @param pseudo The pseudonym you want
+     * @return boolean: true if pseudo change, false if not
      */
     public boolean setPseudonym(String pseudo) {
         boolean pseudoChanged = false;

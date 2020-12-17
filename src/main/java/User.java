@@ -59,4 +59,5 @@ public class User {
     public User_Manager getUsers() { return users; }
     public Chat getChat() { return chat; }
     public Id_Manager getId() { return id; }
+    public Pseudonym getPseudo() { return pseudo; }
 }
