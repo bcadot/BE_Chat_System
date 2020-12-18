@@ -56,4 +56,5 @@ public class User implements Serializable {
     public Chat getChat() { return chat; }
     public Id_Manager getId() { return id; }
     public Pseudonym getPseudo() { return pseudo; }
+    public void setIp(String ip) { this.ip = ip; }
 }
