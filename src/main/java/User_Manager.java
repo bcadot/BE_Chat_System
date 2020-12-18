@@ -18,11 +18,10 @@ public class User_Manager implements Serializable {
         try { activeUsers.remove(u); }
         catch (NullPointerException e) { System.out.println("User not found"); }
     }
-    public void delUserfromIP(String ip) throws FindException {
+    public void delUserfromIP(String ip) {
         for (User u : activeUsers) {
             if (u.getIp().compareTo(ip) == 0) delUser(u);
         }
-        throw new FindException();
     }
 
     public boolean isknown(String ip) {

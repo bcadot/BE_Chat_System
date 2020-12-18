@@ -13,13 +13,13 @@ import java.net.SocketException;
 public class UDP_Serv implements Runnable, Serializable {
     private boolean answer_received = false;
     public static int port = 1234;
-    private String name;
+    private Pseudonym name;
 
     private Network_Manager network;
 
     UDP_Serv(/*Pseudonym pseudo, */Network_Manager n) {
         this.network = n;
-        this.name = this.network.getChat().getUser().getName();
+        this.name = this.network.getChat().getUser().getPseudo();
     }
 
     public boolean isAnswer_received() {
@@ -69,7 +69,8 @@ public class UDP_Serv implements Runnable, Serializable {
                 case "requestValidatePseudonym":
                     System.out.println("-- Serveur UDP --");
                     System.out.println("Réception message de type requestValidatePseudonym");
-                    if (msg.getMessage().equals(this.name)) {
+                    System.out.println("Message reçu : " + msg.getMessage() + " ==?? " + this.name.getPseudonym());
+                    if (msg.getMessage().equals(this.name.getPseudonym())) {
                         System.out.println("pseudo reçu en UDP correspond à mon pseudo");
                         Message answer = new Message("Pseudo already used", "answerValidatePseudonym");
 
@@ -86,7 +87,7 @@ public class UDP_Serv implements Runnable, Serializable {
                         try{
                             byte[] buffer2 = baos.toByteArray();
                             DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, packet.getAddress(), packet.getPort());
-                            server.send(packet);
+                            server.send(packet2);
                             System.out.println("réponse de type answerValidatePseudonym envoyée");
                             System.out.println("-- traitement terminé --");
                         } catch(IOException e){
@@ -113,7 +114,9 @@ public class UDP_Serv implements Runnable, Serializable {
                     try {
                         System.out.println("Mise à jour de la liste des utilisateurs");
                         this.network.getChat().getUser().getUsers().delUserfromIP(msg.getUser().getIp());
+                        System.out.println("Supression utilisateur");
                         this.network.getChat().getUser().getUsers().addUser(msg.getUser());
+                        System.out.println("Ajout utilisateur");
                         System.out.println("-- traitement terminé --");
                     }
                     catch(FindException e) {
