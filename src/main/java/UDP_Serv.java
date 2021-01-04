@@ -63,65 +63,71 @@ public class UDP_Serv implements Runnable, Serializable {
             }
 
             String msgType = msg.getType();
+            System.out.println();
 
-            switch (msgType) {
-                //TODO : changer l'envoi actuel par un envoi de type Message avec le flag answerValidatePseudonym
-                case "requestValidatePseudonym":
-                    System.out.println("-- Serveur UDP --");
-                    System.out.println("Réception message de type requestValidatePseudonym");
-                    System.out.println("Message reçu : " + msg.getMessage() + " ==?? " + this.name.getPseudonym());
-                    if (msg.getMessage().equals(this.name.getPseudonym())) {
-                        System.out.println("pseudo reçu en UDP correspond à mon pseudo");
-                        Message answer = new Message("Pseudo already used", "answerValidatePseudonym");
+            if(!(packet.getAddress().equals(this.network.getIp()))) {
+                switch (msgType) {
+                    //TODO : changer l'envoi actuel par un envoi de type Message avec le flag answerValidatePseudonym
+                    case "requestValidatePseudonym":
+                        System.out.println("-- Serveur UDP --");
+                        System.out.println("Réception message de type requestValidatePseudonym en provenance de " + packet.getAddress().getHostAddress());
+                        System.out.println("Message reçu : " + msg.getMessage() + " ==?? " + this.name.getPseudonym());
+                        if (msg.getMessage().equals(this.name.getPseudonym())) {
+                            System.out.println("pseudo reçu en UDP correspond à mon pseudo");
+                            Message answer = new Message("Pseudo already used", "answerValidatePseudonym");
 
-                        //Transformation of object Message into array of bytes
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        try{
-                            ObjectOutputStream oos = new ObjectOutputStream(baos);
-                            oos.writeObject(answer);
-                        } catch(IOException e){
-                            System.err.println("Error during serialisation : " + e);
-                        }
+                            //Transformation of object Message into array of bytes
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            try {
+                                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                                oos.writeObject(answer);
+                            } catch (IOException e) {
+                                System.err.println("Error during serialisation : " + e);
+                            }
 
-                        //Creation and sending of UDP datagram
-                        try{
-                            byte[] buffer2 = baos.toByteArray();
-                            DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, packet.getAddress(), packet.getPort());
-                            server.send(packet2);
-                            System.out.println("réponse de type answerValidatePseudonym envoyée");
+                            //Creation and sending of UDP datagram
+                            try {
+                                byte[] buffer2 = baos.toByteArray();
+                                DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, packet.getAddress(), packet.getPort());
+                                server.send(packet2);
+                                System.out.println("réponse de type answerValidatePseudonym envoyée à " + packet.getAddress().getHostAddress());
+                                System.out.println("-- traitement terminé --");
+                            } catch (IOException e) {
+                                System.err.println("Error during server answer : " + e);
+                            }
+                        } else {
+                            System.out.println("pseudo reçu en UDP ne correspond pas à mon pseudo");
                             System.out.println("-- traitement terminé --");
-                        } catch(IOException e){
-                            System.err.println("Error during server answer : " + e);
                         }
-                    } else {
-                        System.out.println("pseudo reçu en UDP ne correspond pas à mon pseudo");
+                        break;
+
+                    case "answerValidatePseudonym":
+                        System.out.println("-- Serveur UDP --");
+                        System.out.println("Réception message de type answerValidatePseudonym en provenance de "+ packet.getAddress().getHostAddress());
+                        System.out.println("booléen réponse reçue passe à vrai");
+                        this.answer_received = true;
                         System.out.println("-- traitement terminé --");
-                    }
-
-                case "answerValidatePseudonym":
-                    System.out.println("-- Serveur UDP --");
-                    System.out.println("Réception message de type answerValidatePseudonym");
-                    System.out.println("booléen réponse reçue passe à vrai");
-                    this.answer_received = true;
-                    System.out.println("-- traitement terminé --");
+                        break;
 
 
-                //TODO : traitement réception notifyUsers
-                case "notificationPseudonym":
-                    System.out.println("-- Serveur UDP --");
-                    System.out.println("Réception message de type notificationPseudonym");
-                    //user connu : on supprime l'ancien user associé puis on le rajoute avec le nouveau pseudo
-                    try {
-                        System.out.println("Mise à jour de la liste des utilisateurs");
-                        this.network.getChat().getUser().getUsers().delUserfromIP(msg.getUser().getIp());
-                        System.out.println("Supression utilisateur");
-                        this.network.getChat().getUser().getUsers().addUser(msg.getUser());
-                        System.out.println("Ajout utilisateur");
-                        System.out.println("-- traitement terminé --");
-                    }
-                    catch(FindException e) {
-                        this.network.getChat().getUser().getUsers().addUser(msg.getUser());
-                    }
+                        //TODO : traitement réception notifyUsers
+                    case "notificationPseudonym":
+                        System.out.println("-- Serveur UDP --");
+                        System.out.println("Réception message de type notificationPseudonym en provenance de "+ packet.getAddress().getHostAddress());
+                        //user connu : on supprime l'ancien user associé puis on le rajoute avec le nouveau pseudo
+                        try {
+                            System.out.println("Mise à jour de la liste des utilisateurs");
+
+                            this.network.getChat().getUser().getUsers().delUserfromIP(msg.getUser().getIp());
+                            System.out.println("Supression utilisateur");
+                            this.network.getChat().getUser().getUsers().addUser(msg.getUser());
+                            System.out.println("Ajout utilisateur");
+                            System.out.println("-- traitement terminé --");
+                        } catch (FindException e) {
+                            this.network.getChat().getUser().getUsers().addUser(msg.getUser());
+                        }
+                        break;
+                }
             }
         }
     }

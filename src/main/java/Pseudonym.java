@@ -60,6 +60,12 @@ public class Pseudonym implements Serializable {
         Thread wait_for_answer = new Thread(serv);
         wait_for_answer.start();
 
+        try{
+            Thread.sleep(3000);
+        } catch(InterruptedException e){
+            System.out.println("Thread interrupted");
+        }
+
         return !serv.isAnswer_received();
     }
 
