@@ -37,7 +37,7 @@ public class Network_Manager implements Serializable {
      */
     public void broadcastMessage(Message msg) throws IOException {
         try{
-            broadcast(msg, InetAddress.getByName("192.168.56.255"));
+            broadcast(msg, InetAddress.getByName("255.255.255.255"));
         }
         catch(UnknownHostException e){
             System.out.println("Host unknown");

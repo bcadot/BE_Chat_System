@@ -50,7 +50,6 @@ public class Pseudonym implements Serializable {
     public Boolean validatePseudonym(String pseudonym) {
         Message pseudo = new Message(pseudonym, "requestValidatePseudonym");
         Network_Manager net = this.agent.getChat().getNetwork();
-        UDP_Serv serv = net.getBdServer();
 
         //Send pseudo in broadcast UDP
         try {
@@ -59,11 +58,14 @@ public class Pseudonym implements Serializable {
             System.out.println("Error during broadcast transmission");
         }
 
-        Thread wait_for_answer = new Thread(serv);
-        wait_for_answer.start();
 
+        try{
+            Thread.sleep(5000);
+        }catch(InterruptedException e){
+            System.out.println("Thread interrupted");
+        }
 
-        return !serv.isAnswer_received();
+        return !agent.getServ().isAnswer_received();
     }
 
     /**
