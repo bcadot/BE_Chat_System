@@ -61,12 +61,7 @@ public class Pseudonym implements Serializable {
 
         Thread wait_for_answer = new Thread(serv);
         wait_for_answer.start();
-        try {
-            sleep(2000);
-        }
-        catch (Exception e){
-            System.out.println("Not tired");
-        }
+
 
         return !serv.isAnswer_received();
     }

@@ -31,7 +31,6 @@ public class Id_Manager implements Serializable {
                     InetAddress addr = a.nextElement();
                     if ((addr instanceof Inet4Address) && !addr.getHostAddress().equals("127.0.0.1") && !addr.getHostAddress().equals("127.0.1.1") && !addr.getHostAddress().equals("10.193.228.180")) {  //TODO PENSER A ENLEVER LE DERNIER
                         ip = addr;
-                        System.out.println(ip);
                         found = true;
                     }
                 }
