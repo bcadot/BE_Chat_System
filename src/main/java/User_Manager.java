@@ -4,24 +4,23 @@ import java.util.ArrayList;
 
 public class User_Manager implements Serializable {
     private ArrayList<User> activeUsers = new ArrayList<User>();
-    private User user;
+    private Agent agent;
 
-    public User_Manager(User u) {
-        this.user = u;
+    public User_Manager(Agent a) {
+        this.agent = a;
     }
 
     public void addUser(User u) {
         activeUsers.add(u);
     }
-    //public void addUser(String ip, int port, String name) { activeUsers.add(new User(ip, port, name)); }
+    //public void addUser(String ip, int port, String name) { activeUsers.add(new Agent(ip, port, name)); }
     public void delUser(User u) {
         try { activeUsers.remove(u); }
-        catch (NullPointerException e) { System.out.println("User not found"); }
+        catch (NullPointerException e) { System.out.println("Agent not found"); }
     }
+
     public void delUserfromIP(String ip) {
-        for (User u : activeUsers) {
-            if (u.getIp().compareTo(ip) == 0) delUser(u);
-        }
+        activeUsers.removeIf(u -> u.getIp().equals(ip));
     }
 
     public boolean isknown(String ip) {
@@ -35,5 +34,12 @@ public class User_Manager implements Serializable {
                 if (u.getName().compareTo(name) == 0) return u.getIp();
             }
             throw new FindException();
+    }
+
+    public void printUsers() {
+        System.out.println("List :");
+        for (User u : activeUsers) {
+            System.out.println("Agent : " + u.getName() + " " + u.getIp());
+        }
     }
 }

@@ -1,21 +1,23 @@
 import java.io.IOException;
 import java.io.Serializable;
 
+import static java.lang.Thread.sleep;
+
 /**
- * A user can choose a pseudonym. It can be changed whenever the user wants to. There can not be two identical
+ * A agent can choose a pseudonym. It can be changed whenever the agent wants to. There can not be two identical
  * pseudonyms.
  */
 public class Pseudonym implements Serializable {
     //Attributes
     private String pseudonym;
-    private User user;
+    private Agent agent;
 
     /**
      * Pseudonym default constructor
      */
-    Pseudonym(User u) {
-        this.user = u;
-        Id_Manager id = this.user.getId();
+    Pseudonym(Agent u) {
+        this.agent = u;
+        Id_Manager id = this.agent.getId();
         this.pseudonym = id.getId();
     }
 
@@ -47,8 +49,8 @@ public class Pseudonym implements Serializable {
      */
     public Boolean validatePseudonym(String pseudonym) {
         Message pseudo = new Message(pseudonym, "requestValidatePseudonym");
-        Network_Manager net = this.user.getChat().getNetwork();
-        UDP_Serv serv = this.user.getChat().getNetwork().getBdServer();
+        Network_Manager net = this.agent.getChat().getNetwork();
+        UDP_Serv serv = net.getBdServer();
 
         //Send pseudo in broadcast UDP
         try {
@@ -59,22 +61,22 @@ public class Pseudonym implements Serializable {
 
         Thread wait_for_answer = new Thread(serv);
         wait_for_answer.start();
-
-        try{
-            Thread.sleep(3000);
-        } catch(InterruptedException e){
-            System.out.println("Thread interrupted");
+        try {
+            sleep(2000);
+        }
+        catch (Exception e){
+            System.out.println("Not tired");
         }
 
         return !serv.isAnswer_received();
     }
 
     /**
-     * Notify other active users that the current user has been changed.
+     * Notify other active users that the current agent has been changed.
      */
     public void notifyUsers(){
-        Message newUser = new Message(this.user);
-        Network_Manager net = this.user.getChat().getNetwork();
+        Message newUser = new Message(new User(this.agent.getId().getId(), this.agent.getRcvPort(), this.getPseudonym()));
+        Network_Manager net = this.agent.getChat().getNetwork();
 
         //Send pseudo in broadcast UDP
         try {

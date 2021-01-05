@@ -11,30 +11,30 @@ public class Chat implements Serializable {
     //private int broadcast = 0;
     //private int multicast = 0;
 
-    private User user;
+    private Agent agent;
     /*
     public Chat() {
         //this.broadcast = 1;
         //TODO gérer broadcast
     }
 
-    public Chat(User dest) {
+    public Chat(Agent dest) {
         //this.unicast = 1;
         //TODO gérer unicast
     }
 
-    public Chat(User... users) {
+    public Chat(Agent... users) {
         //this.multicast = 1;
         //TODO gérer multicast
     }
     */
 
-    public Chat(User u) {
-        this.user = u;
+    public Chat(Agent u) {
+        this.agent = u;
         this.network = new Network_Manager(this);
         this.data = new Data_Manager(this);
     }
 
-    public User getUser() { return user; }
+    public Agent getUser() { return agent; }
     public Network_Manager getNetwork() { return network; }
 }

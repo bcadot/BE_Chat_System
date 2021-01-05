@@ -21,9 +21,10 @@ public class Network_Manager implements Serializable {
         this.chat = c;
         this.bdServer = new UDP_Serv(this);
         try {
-            this.ip =  InetAddress.getLocalHost();
+            String ownIP = c.getUser().getId().getId();
+            this.ip = InetAddress.getByName(ownIP);
         }
-        catch (UnknownHostException e){
+        catch(UnknownHostException e){
             System.out.println("Host unknown");
         }
     }
@@ -36,7 +37,7 @@ public class Network_Manager implements Serializable {
      */
     public void broadcastMessage(Message msg) throws IOException {
         try{
-            broadcast(msg, InetAddress.getByName("255.255.255.255"));
+            broadcast(msg, InetAddress.getByName("192.168.56.255"));
         }
         catch(UnknownHostException e){
             System.out.println("Host unknown");
