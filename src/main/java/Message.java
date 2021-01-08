@@ -10,7 +10,7 @@ public class Message implements Serializable {
     private String message;
     private User user;
     private String type; //notificationPseudonym | requestValidatePseudonym | answerValidatePseudonym | Chat | File
-    private Timestamp timestamp;
+    //private Timestamp timestamp;
 
     public Message(String message, String type){
         this.message = message;
@@ -20,8 +20,16 @@ public class Message implements Serializable {
         this.user = u;
         this.type = "notificationPseudonym";
     }
+    public Message(String message) {
+        this.message = message;
+        //TODO Update timestamp / time
+    }
 
     public String getMessage() { return message; }
     public String getType() { return type; }
     public User getUser() { return user; }
+    @Override
+    public String toString() {
+        return /*user.toString() + " : " +*/ message + " [" + /*timestamp.toString() +*/ "]";
+    }
 }

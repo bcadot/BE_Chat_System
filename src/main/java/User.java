@@ -8,7 +8,7 @@ public class User implements Serializable {
 
 
     /**
-     * Agent constructor, used to add new users to the list of active users.
+     * User constructor, used to add new users to the list of active users.
      * @param ip the ip address
      * @param port the listening port
      * @param name the pseudonym of the user
@@ -24,6 +24,9 @@ public class User implements Serializable {
     public int getRcvPort() { return rcvPort; }
     public String getName() { return name; }
     public void setIp(String ip) { this.ip = ip; }
-
+    @Override
+    public String toString() {
+        return "(User " + ip + " = " + name + " on port " + rcvPort + ")";
+    }
 
 }

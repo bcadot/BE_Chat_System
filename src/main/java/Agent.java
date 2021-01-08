@@ -27,6 +27,7 @@ public class Agent implements Serializable {
         this.serv = chat.getNetwork().getBdServer();
         Thread wait_for_answer = new Thread(serv);
         wait_for_answer.start();
+        //TODO démarrer le serveur TCP
     }
     /*
     public void startSession(Agent user) {

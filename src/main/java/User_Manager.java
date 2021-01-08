@@ -35,6 +35,12 @@ public class User_Manager implements Serializable {
             }
             throw new FindException();
     }
+    public int getPortfromUsername(String name) throws FindException {
+        for (User u : activeUsers) {
+            if (u.getName().equals(name)) return u.getRcvPort();
+        }
+        throw new FindException();
+    }
 
     public void printUsers() {
         System.out.println("List :");

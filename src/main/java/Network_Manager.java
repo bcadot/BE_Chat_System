@@ -13,6 +13,7 @@ public class Network_Manager implements Serializable {
 
     private Chat chat;
     private UDP_Serv bdServer;
+    private TCP_Serv rcpServer;
 
     /**
      * Default constructor, retrieve localhost @ip.
@@ -20,6 +21,7 @@ public class Network_Manager implements Serializable {
     Network_Manager(Chat c){
         this.chat = c;
         this.bdServer = new UDP_Serv(this);
+        this.rcpServer = new TCP_Serv(this);
         try {
             String ownIP = c.getUser().getId().getId();
             this.ip = InetAddress.getByName(ownIP);
@@ -74,6 +76,43 @@ public class Network_Manager implements Serializable {
             System.err.println("Error during pseudonym broadcast : " + e);
         }
         socket.close();
+    }
+
+    /**
+     * Send a message over TCP to a provided user
+     *
+     * @param msg message to send
+     * @param user msg will be sent to this user
+     * @throws IOException when transmission error
+     */
+    public void send(Message msg, User user) throws IOException {
+
+        //Get ip and port from user
+        String ip = null;
+        int port = -1;
+        try {
+            ip = this.chat.getAgent().getUsers().getIPfromUsername(user.getName());
+            port = this.chat.getAgent().getUsers().getPortfromUsername(user.getName());
+        } catch (FindException e) {
+            System.err.println("Error during ip retrieving : " + e);
+        }
+
+        Socket clientSocket = new Socket();
+        try{
+            clientSocket = new Socket(InetAddress.getByName(ip), port);
+            System.out.println("--- Client socket created ---");
+        } catch (IOException e) { System.err.println("!!! Could not create the socket !!!"); }
+
+        //Object writing
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            outputStream.writeObject(msg);
+        } catch (IOException e) {
+            System.err.println("Error during object writing : " + e);
+        }
+
+        System.out.println("--- Client socket closed ---");
+        clientSocket.close();
     }
 
     public InetAddress getIp() { return ip; }
