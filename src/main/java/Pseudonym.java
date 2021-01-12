@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.Serializable;
 
 import static java.lang.Thread.sleep;
 
@@ -7,7 +6,7 @@ import static java.lang.Thread.sleep;
  * A agent can choose a pseudonym. It can be changed whenever the agent wants to. There can not be two identical
  * pseudonyms.
  */
-public class Pseudonym implements Serializable {
+public class Pseudonym {
     //Attributes
     private String pseudonym;
     private Agent agent;
@@ -29,7 +28,7 @@ public class Pseudonym implements Serializable {
      */
     public boolean setPseudonym(String pseudo) {
         boolean pseudoChanged = false;
-        if (validatePseudonym(pseudo)) {
+        if (validatePseudonym(pseudo)) {    //TODO gérer la notification même quand pseudo non valide
             pseudonym = pseudo;
             pseudoChanged = true;
             notifyUsers();
@@ -55,16 +54,21 @@ public class Pseudonym implements Serializable {
         try {
             net.broadcastMessage(pseudo);
         } catch (IOException e) {
-            System.out.println("Error during broadcast transmission");
+            System.err.println("Error during broadcast transmission");
         }
 
-
+        /*
         try{
             Thread.sleep(5000);
         }catch(InterruptedException e){
             System.out.println("Thread interrupted");
         }
+        */
 
+        for (int i = 0; i < 50000; i++) {
+            System.out.print("");
+        }
+        System.out.println();
         return !agent.getServ().isAnswer_received();
     }
 
@@ -72,11 +76,15 @@ public class Pseudonym implements Serializable {
      * Notify other active users that the current agent has been changed.
      */
     public void notifyUsers(){
-        Message newUser = new Message(new User(this.agent.getId().getId(), this.agent.getRcvPort(), this.getPseudonym()));
+        System.out.println("Méthode notifyUsers");
+        Message newUser = new Message(new User(this.agent.getId().getId(),
+                this.agent.getTcpPort(),
+                this.getPseudonym()));
         Network_Manager net = this.agent.getChat().getNetwork();
 
         //Send pseudo in broadcast UDP
         try {
+            System.out.println("Broadcast de l'user");
             net.broadcastMessage(newUser);
         } catch (IOException e) {
             System.out.println("Error during broadcast transmission");

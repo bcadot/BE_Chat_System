@@ -1,9 +1,8 @@
-import java.io.Serializable;
-
 /**
- * Represents a user.
+ * Represents the agent.
  */
-public class Agent implements Serializable {
+
+public class Agent {
     //TODO list attributes
     private UDP_Serv serv;
 
@@ -14,7 +13,7 @@ public class Agent implements Serializable {
     private User_Manager users;
 
     //The following attributes are determined by the previous managers and will be the ones used.
-    private int rcvPort = 1234; //TODO déterminer le port d'écoute attribué à un user --> classe server
+    private int tcpPort = -1;   //updated when TCP_Serv starts
 
     //This a Chat class
     private Chat chat;
@@ -38,10 +37,11 @@ public class Agent implements Serializable {
         //fin ack
     }
     */
-    public int getRcvPort() { return rcvPort; }
+    public int getTcpPort() { return tcpPort; }
     public User_Manager getUsers() { return users; }
     public Chat getChat() { return chat; }
     public Id_Manager getId() { return id; }
     public Pseudonym getPseudo() { return pseudo; }
     public UDP_Serv getServ() { return serv; }
+    public void setTcpPort(int port) { this.tcpPort = port; }
 }

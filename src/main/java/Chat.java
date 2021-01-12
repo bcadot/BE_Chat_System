@@ -1,9 +1,7 @@
-import java.io.Serializable;
-
 /**
  * Represents what you need to establish a communication : a network manager and a data manager
  */
-public class Chat implements Serializable {
+public class Chat {
     private Network_Manager network;
     private Data_Manager data;
     private String ipDest;

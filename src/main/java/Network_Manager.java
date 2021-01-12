@@ -5,31 +5,58 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.lang.module.FindException;
 import java.net.*;
+import java.util.Enumeration;
 
-public class Network_Manager implements Serializable {
-    private InetAddress ip;
+public class Network_Manager {
+    private InetAddress ip;     //TODO voir si vraiment utile
+    private InetAddress broadcastip;
 
     private Chat chat;
     private UDP_Serv bdServer;
-    private TCP_Serv rcpServer;
+    private TCP_Serv tcpServer;
 
     /**
-     * Default constructor, retrieve localhost @ip.
+     * Default constructor, retrieve ip with Id_Manager and broadcast ip.
      */
     Network_Manager(Chat c){
         this.chat = c;
         this.bdServer = new UDP_Serv(this);
-        this.rcpServer = new TCP_Serv(this);
+        this.tcpServer = new TCP_Serv(this);
         try {
             String ownIP = c.getAgent().getId().getId();
             this.ip = InetAddress.getByName(ownIP);
+            this.broadcastip = getBroadcastAddress();
         }
         catch(UnknownHostException e){
-            System.out.println("Host unknown");
+            System.err.println("Host unknown" + e);
         }
+        catch (SocketException e) {
+            System.err.println("Could not determine broadcast address" + e);
+        }
+    }
+
+    /**
+     * Returns the local broadcast address
+     *
+     * @throws SocketException if the platform does not have at least one configured network interface
+     */
+    public InetAddress getBroadcastAddress() throws SocketException {
+        InetAddress broadcast = null;
+        boolean found = false;
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements() && !found) {
+            NetworkInterface networkInterface = interfaces.nextElement();
+
+            for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+                broadcast = interfaceAddress.getBroadcast();
+                if (broadcast != null && broadcast.getHostAddress().matches("192.168.*.*"))
+                    found = true;
+                break;
+            }
+        }
+        return broadcast;
     }
 
     /**
@@ -40,7 +67,7 @@ public class Network_Manager implements Serializable {
      */
     public void broadcastMessage(Message msg) throws IOException {
         try{
-            broadcast(msg, InetAddress.getByName("255.255.255.255"));
+            broadcast(msg, this.broadcastip);
         }
         catch(UnknownHostException e){
             System.out.println("Host unknown");
@@ -119,4 +146,6 @@ public class Network_Manager implements Serializable {
     public InetAddress getIp() { return ip; }
     public Chat getChat() { return chat; }
     public UDP_Serv getBdServer() { return bdServer; }
+    public TCP_Serv getTcpServer() { return tcpServer; }
+    public InetAddress getBroadcastip() { return broadcastip; }
 }

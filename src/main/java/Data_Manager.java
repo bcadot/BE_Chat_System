@@ -1,6 +1,4 @@
-import java.io.Serializable;
-
-public class Data_Manager implements Serializable {
+public class Data_Manager {
     private Chat chat;
 
     public Data_Manager(Chat c) {

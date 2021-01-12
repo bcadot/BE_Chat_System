@@ -11,7 +11,7 @@ import java.net.SocketException;
  */
 
 
-public class UDP_Serv implements Runnable, Serializable {
+public class UDP_Serv implements Runnable {
     private boolean answer_received = false;
     public static int port = 1234;
     //private String name;
@@ -26,7 +26,6 @@ public class UDP_Serv implements Runnable, Serializable {
     public boolean isAnswer_received() {
         return answer_received;
     }
-    public Network_Manager getNetwork() { return network; }
 
 
     public void run() {
@@ -52,8 +51,6 @@ public class UDP_Serv implements Runnable, Serializable {
                 System.err.println("Error during message reception : " + e);
             }
 
-            //if (packet.getAddress().getHostAddress().equals())
-
             //Object retrieving
             try {
                 ByteArrayInputStream bais = new ByteArrayInputStream(packet.getData());
@@ -68,6 +65,7 @@ public class UDP_Serv implements Runnable, Serializable {
             String msgType = msg.getType();
 
             if (!packet.getAddress().equals(this.network.getIp())) {
+                System.out.printf("\n--> Message recu, traitement :");
                 switch (msgType) {
                     case "requestValidatePseudonym":
                         System.out.println("");
@@ -91,7 +89,7 @@ public class UDP_Serv implements Runnable, Serializable {
                             //Creation and sending of UDP datagram
                             try {
                                 byte[] buffer2 = baos.toByteArray();
-                                DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, packet.getAddress(),1234);
+                                DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, packet.getAddress(), 1234);
                                 server.send(packet2);
                                 System.out.println("réponse de type answerValidatePseudonym envoyée à " + packet.getAddress().getHostAddress());
                                 System.out.println("-- traitement terminé --");
@@ -114,19 +112,19 @@ public class UDP_Serv implements Runnable, Serializable {
                         break;
 
 
-                        //TODO : traitement réception notifyUsers
+                    //TODO : traitement réception notifyUsers
                     case "notificationPseudonym":
                         System.out.println("");
                         System.out.println("-- Serveur UDP --");
                         System.out.println("Réception message de type notificationPseudonym");
-                        System.out.println("Agent recu : " + msg.getUser().getName() + " " + msg.getUser().getIp());
+                        System.out.println("(Agent recu : " + msg.getUser().getName() +" "+msg.getUser().getIp()+")");
                         //user connu : on supprime l'ancien user associé puis on le rajoute avec le nouveau pseudo
                         if (this.network.getChat().getAgent().getUsers().isknown(msg.getUser().getIp())) {
                             System.out.println("Mise à jour de la liste des utilisateurs : user known");
                             this.network.getChat().getAgent().getUsers().delUserfromIP(msg.getUser().getIp());
                         } else {
                             System.out.println("Mise à jour de la liste des utilisateurs : user was unknown");
-                            this.network.getChat().getAgent().getPseudo().notifyUsers();
+                            //TODO notifyUsers
                         }
                         this.network.getChat().getAgent().getUsers().addUser(msg.getUser());
                         this.network.getChat().getAgent().getUsers().printUsers();   //TODO ENLEVER APRES TEST

@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.lang.module.FindException;
 import java.util.ArrayList;
 
-public class User_Manager implements Serializable {
+public class User_Manager {
     private ArrayList<User> activeUsers = new ArrayList<User>();
     private Agent agent;
 

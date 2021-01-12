@@ -1,11 +1,11 @@
-import java.net.*;
-import java.io.*;
-import java.lang.Thread;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public class TCP_Serv {
+public class TCP_Serv implements Runnable {
 
-    //PORT A DETERMINER CI DESSOUS
-    private static int PORT = 1200;
+    private static int PORT = 0;
 
     private Network_Manager network;
 
@@ -13,17 +13,16 @@ public class TCP_Serv {
         this.network = network;
     }
 
-    public Network_Manager getNetwork() { return network; }
-
-    public void run() throws IOException {
+    public void run() {
         Message msg = null;
 
-        //TODO Déterminer le port à utiliser
-
         //Socket creation
-        ServerSocket serverSocket = new ServerSocket();
+        ServerSocket serverSocket = null;
         try {
+            //Socket created with port 0 --> port automatically allocated and retrieved next line
             serverSocket = new ServerSocket(PORT);
+            PORT = serverSocket.getLocalPort();
+            this.network.getChat().getAgent().setTcpPort(PORT);
             System.out.println("--- TCP Server socket created ---");
         }
         catch (IOException e) { System.err.println("!!! Could not create the socket !!!"); }
