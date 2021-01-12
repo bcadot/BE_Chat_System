@@ -74,7 +74,7 @@ public class UDP_Serv implements Runnable, Serializable {
                         System.out.println("-- Serveur UDP --");
                         System.out.println("Réception message de type requestValidatePseudonym");
 
-                        if (msg.getMessage().equals(this.network.getChat().getUser().getPseudo().getPseudonym())) {
+                        if (msg.getMessage().equals(this.network.getChat().getAgent().getPseudo().getPseudonym())) {
                             System.out.println("pseudo reçu en UDP correspond à mon pseudo");
                             //Creation of the response Message
                             Message answer = new Message("Pseudo already used", "answerValidatePseudonym");
@@ -91,7 +91,7 @@ public class UDP_Serv implements Runnable, Serializable {
                             //Creation and sending of UDP datagram
                             try {
                                 byte[] buffer2 = baos.toByteArray();
-                                DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, packet.getAddress(), packet.getPort());
+                                DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, packet.getAddress(),1234);
                                 server.send(packet2);
                                 System.out.println("réponse de type answerValidatePseudonym envoyée à " + packet.getAddress().getHostAddress());
                                 System.out.println("-- traitement terminé --");
@@ -119,16 +119,17 @@ public class UDP_Serv implements Runnable, Serializable {
                         System.out.println("");
                         System.out.println("-- Serveur UDP --");
                         System.out.println("Réception message de type notificationPseudonym");
-                        System.out.println("Agent recu : " + msg.getUser().getName() + msg.getUser().getIp());
+                        System.out.println("Agent recu : " + msg.getUser().getName() + " " + msg.getUser().getIp());
                         //user connu : on supprime l'ancien user associé puis on le rajoute avec le nouveau pseudo
-                        if (this.network.getChat().getUser().getUsers().isknown(msg.getUser().getIp())) {
+                        if (this.network.getChat().getAgent().getUsers().isknown(msg.getUser().getIp())) {
                             System.out.println("Mise à jour de la liste des utilisateurs : user known");
-                            this.network.getChat().getUser().getUsers().delUserfromIP(msg.getUser().getIp());
+                            this.network.getChat().getAgent().getUsers().delUserfromIP(msg.getUser().getIp());
                         } else {
                             System.out.println("Mise à jour de la liste des utilisateurs : user was unknown");
+                            this.network.getChat().getAgent().getPseudo().notifyUsers();
                         }
-                        this.network.getChat().getUser().getUsers().addUser(msg.getUser());
-                        this.network.getChat().getUser().getUsers().printUsers();   //TODO ENLEVER APRES TEST
+                        this.network.getChat().getAgent().getUsers().addUser(msg.getUser());
+                        this.network.getChat().getAgent().getUsers().printUsers();   //TODO ENLEVER APRES TEST
                         System.out.println("-- traitement terminé --");
                         break;
                 }

@@ -35,6 +35,6 @@ public class Chat implements Serializable {
         this.data = new Data_Manager(this);
     }
 
-    public Agent getUser() { return agent; }
+    public Agent getAgent() { return agent; }
     public Network_Manager getNetwork() { return network; }
 }

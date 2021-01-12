@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.module.FindException;
 import java.net.*;
 
 public class Network_Manager implements Serializable {
@@ -23,7 +24,7 @@ public class Network_Manager implements Serializable {
         this.bdServer = new UDP_Serv(this);
         this.rcpServer = new TCP_Serv(this);
         try {
-            String ownIP = c.getUser().getId().getId();
+            String ownIP = c.getAgent().getId().getId();
             this.ip = InetAddress.getByName(ownIP);
         }
         catch(UnknownHostException e){
@@ -62,7 +63,7 @@ public class Network_Manager implements Serializable {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try{
             ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(broadcastMessage); //TODO pb here
+            oos.writeObject(broadcastMessage);
         } catch(IOException e){
             System.err.println("Error during serialisation : " + e);
         }

@@ -48,4 +48,8 @@ public class User_Manager implements Serializable {
             System.out.println("Agent : " + u.getName() + " " + u.getIp());
         }
     }
+
+    public ArrayList<User> getActiveUsers(){
+        return activeUsers;
+    }
 }
