@@ -4,7 +4,8 @@
 
 public class Agent {
     //TODO list attributes
-    private UDP_Serv serv;
+    private UDP_Serv udpServ;
+    private TCP_Serv tcpServ;
 
 
     //The following attributes are managers for the Agent class.
@@ -23,10 +24,12 @@ public class Agent {
         this.pseudo = new Pseudonym(this);
         this.users = new User_Manager(this);
         this.chat = new Chat(this);
-        this.serv = chat.getNetwork().getBdServer();
-        Thread wait_for_answer = new Thread(serv);
+        this.udpServ = chat.getNetwork().getBdServer();
+        Thread wait_for_answer = new Thread(udpServ);
         wait_for_answer.start();
-        //TODO démarrer le serveur TCP
+        this.tcpServ = chat.getNetwork().getTcpServer();
+        Thread recep = new Thread(tcpServ);
+        recep.start();
     }
     /*
     public void startSession(Agent user) {
@@ -42,6 +45,6 @@ public class Agent {
     public Chat getChat() { return chat; }
     public Id_Manager getId() { return id; }
     public Pseudonym getPseudo() { return pseudo; }
-    public UDP_Serv getServ() { return serv; }
+    public UDP_Serv getServ() { return udpServ; }
     public void setTcpPort(int port) { this.tcpPort = port; }
 }

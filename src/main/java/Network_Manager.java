@@ -5,7 +5,6 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.lang.module.FindException;
 import java.net.*;
 import java.util.Enumeration;
 
@@ -51,9 +50,11 @@ public class Network_Manager {
 
             for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
                 broadcast = interfaceAddress.getBroadcast();
-                if (broadcast != null && broadcast.getHostAddress().matches("192.168.*.*"))
+                if (broadcast != null && (broadcast.getHostAddress().matches("192.168.*.*")
+                        || broadcast.getHostAddress().matches("172.*.*.*"))) {
                     found = true;
-                break;
+                    break;
+                }
             }
         }
         return broadcast;
@@ -121,7 +122,7 @@ public class Network_Manager {
         try {
             ip = this.chat.getAgent().getUsers().getIPfromUsername(user.getName());
             port = this.chat.getAgent().getUsers().getPortfromUsername(user.getName());
-        } catch (FindException e) {
+        } catch (NullPointerException e) {
             System.err.println("Error during ip retrieving : " + e);
         }
 

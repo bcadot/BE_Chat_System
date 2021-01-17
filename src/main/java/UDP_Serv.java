@@ -1,8 +1,6 @@
 import java.io.*;
-import java.lang.module.FindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 
 
@@ -18,9 +16,8 @@ public class UDP_Serv implements Runnable {
 
     private Network_Manager network;
 
-    UDP_Serv(/*Pseudonym pseudo, */Network_Manager n) {
+    UDP_Serv(Network_Manager n) {
         this.network = n;
-        //this.name = this.network.getChat().getUser().getPseudo().getPseudonym();
     }
 
     public boolean isAnswer_received() {
@@ -124,10 +121,10 @@ public class UDP_Serv implements Runnable {
                             this.network.getChat().getAgent().getUsers().delUserfromIP(msg.getUser().getIp());
                         } else {
                             System.out.println("Mise à jour de la liste des utilisateurs : user was unknown");
-                            //TODO notifyUsers
+                            this.network.getChat().getAgent().getPseudo().notifyUsers();
                         }
                         this.network.getChat().getAgent().getUsers().addUser(msg.getUser());
-                        this.network.getChat().getAgent().getUsers().printUsers();   //TODO ENLEVER APRES TEST
+                        //this.network.getChat().getAgent().getUsers().printUsers();   //TODO ENLEVER APRES TEST
                         System.out.println("-- traitement terminé --");
                         break;
                 }

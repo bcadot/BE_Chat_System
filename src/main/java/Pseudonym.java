@@ -1,9 +1,7 @@
 import java.io.IOException;
 
-import static java.lang.Thread.sleep;
-
 /**
- * A agent can choose a pseudonym. It can be changed whenever the agent wants to. There can not be two identical
+ * An agent can choose a pseudonym. It can be changed whenever the agent wants to. There can not be two identical
  * pseudonyms.
  */
 public class Pseudonym {
@@ -16,17 +14,20 @@ public class Pseudonym {
      */
     Pseudonym(Agent u) {
         this.agent = u;
-        Id_Manager id = this.agent.getId();
-        this.pseudonym = id.getId();
+        this.pseudonym = this.agent.getId().getId();
     }
 
     /**
      * Set pseudonym.
      *
-     * @param pseudo The pseudonym you want
+     * @param p The pseudonym you want
      * @return boolean: true if pseudo change, false if not
+     * @throws NullPointerException if given pseudonym is empty
      */
-    public boolean setPseudonym(String pseudo) {
+    public boolean setPseudonym(String p) throws NullPointerException {
+        String pseudo = p.trim();
+        if (pseudo.isEmpty()) throw new NullPointerException();
+        if (pseudo.equals(this.pseudonym)) return false;
         boolean pseudoChanged = false;
         if (validatePseudonym(pseudo)) {    //TODO gérer la notification même quand pseudo non valide
             pseudonym = pseudo;

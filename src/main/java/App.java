@@ -2,10 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class App {
-    private Agent user = new Agent();
+    private Agent agent = new Agent();
     private JButton button1;
     private JPanel MyPanel;
     private JTextField pseudoInput;
@@ -18,11 +17,18 @@ public class App {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (user.getPseudo().setPseudonym(pseudoInput.getText())) {
-                    pseudo.setText(user.getPseudo().getPseudonym());
-                } else {
+                try {
+                    if (agent.getPseudo().setPseudonym(pseudoInput.getText())) {
+                        pseudo.setText(agent.getPseudo().getPseudonym());
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Pseudo already used, choose another one.",
+                                "Inane warning",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                } catch (NullPointerException npe) {
                     JOptionPane.showMessageDialog(null,
-                            "Pseudo already used, chose another one.",
+                            "You cannot choose an empty pseudo.",
                             "Inane warning",
                             JOptionPane.WARNING_MESSAGE);
                 }
@@ -36,8 +42,8 @@ public class App {
         return usersList;
     }
 
-    public Agent getUser() {
-        return user;
+    public Agent getAgent() {
+        return agent;
     }
 
     public static void main(String[] args) {

@@ -29,17 +29,17 @@ public class User_Manager {
         }
         return false;
     }
-    public String getIPfromUsername(String name) throws FindException {
+    public String getIPfromUsername(String name) throws NullPointerException {
             for (User u : activeUsers) {
                 if (u.getName().compareTo(name) == 0) return u.getIp();
             }
-            throw new FindException();
+            throw new NullPointerException();
     }
-    public int getPortfromUsername(String name) throws FindException {
+    public int getPortfromUsername(String name) throws NullPointerException {
         for (User u : activeUsers) {
             if (u.getName().equals(name)) return u.getRcvPort();
         }
-        throw new FindException();
+        throw new NullPointerException();
     }
 
     public void printUsers() {
