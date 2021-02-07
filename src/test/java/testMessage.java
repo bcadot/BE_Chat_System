@@ -19,8 +19,9 @@ public class testMessage {
         System.out.println("-->" + ben.getPseudo().getPseudonym() + " ; " + ben.getId().getId());
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (Exception e) {}
+
         ben.getUsers().printUsers();
 
         try {

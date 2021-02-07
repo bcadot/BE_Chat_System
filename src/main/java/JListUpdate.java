@@ -1,14 +1,6 @@
 import javax.swing.*;
-import java.io.*;
-import java.lang.module.FindException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.io.Serializable;
 
-
-public class JListUpdate implements Runnable, Serializable {
+public class JListUpdate implements Runnable {
     private App app;
     private DefaultListModel l;
 
@@ -19,7 +11,7 @@ public class JListUpdate implements Runnable, Serializable {
 
     public DefaultListModel getUsersOnline (){
         DefaultListModel result = new DefaultListModel();
-        for(User u : app.getUser().getUsers().getActiveUsers()){
+        for(User u : app.getAgent().getUsers().getActiveUsers()){
             result.addElement(u.getName());
         }
         return result;

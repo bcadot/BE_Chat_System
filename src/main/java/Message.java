@@ -1,5 +1,6 @@
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a message which is sent through the network.
@@ -10,7 +11,7 @@ public class Message implements Serializable {
     private String message;
     private User user;
     private String type; //notificationPseudonym | requestValidatePseudonym | answerValidatePseudonym | Chat | File
-    //private Timestamp timestamp;
+    private LocalDateTime timestamp;
 
     public Message(String message, String type){
         this.message = message;
@@ -22,7 +23,8 @@ public class Message implements Serializable {
     }
     public Message(String message) {
         this.message = message;
-        //TODO Update timestamp / time
+        this.timestamp = LocalDateTime.now();
+        this.type = "Chat";
     }
 
     public String getMessage() { return message; }
@@ -30,6 +32,10 @@ public class Message implements Serializable {
     public User getUser() { return user; }
     @Override
     public String toString() {
-        return /*user.toString() + " : " +*/ message + " [" + /*timestamp.toString() +*/ "]";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM, HH:mm");
+        if (message == null || message.isEmpty())
+            return /*user.toString() + " : " +*/ "" + " [" + dtf.format(timestamp) + "]";
+        else
+            return /*user.toString() + " : " +*/ message + " [" + dtf.format(timestamp) + "]";
     }
 }

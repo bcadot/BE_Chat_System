@@ -35,4 +35,5 @@ public class Chat {
 
     public Agent getAgent() { return agent; }
     public Network_Manager getNetwork() { return network; }
+    public Data_Manager getData() { return data; }
 }

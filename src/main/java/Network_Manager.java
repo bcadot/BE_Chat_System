@@ -5,7 +5,10 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.*;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Enumeration;
 
 public class Network_Manager {
@@ -51,7 +54,7 @@ public class Network_Manager {
             for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
                 broadcast = interfaceAddress.getBroadcast();
                 if (broadcast != null && (broadcast.getHostAddress().matches("192.168.*.*")
-                        || broadcast.getHostAddress().matches("172.*.*.*"))) {
+                        /*|| broadcast.getHostAddress().matches("172.*.*.*")*/)) {
                     found = true;
                     break;
                 }
@@ -114,7 +117,7 @@ public class Network_Manager {
      * @param user msg will be sent to this user
      * @throws IOException when transmission error
      */
-    public void send(Message msg, User user) throws IOException {
+    public void send(Message msg, User user) throws IOException {   //TODO ajouter le Data_Manager.insert()
 
         //Get ip and port from user
         String ip = null;
@@ -136,6 +139,7 @@ public class Network_Manager {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             outputStream.writeObject(msg);
+            outputStream.close();
         } catch (IOException e) {
             System.err.println("Error during object writing : " + e);
         }

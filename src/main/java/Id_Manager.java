@@ -2,7 +2,7 @@ import java.net.*;
 import java.util.Enumeration;
 
 /**
- * A agent is given an id by retrieving the local @ip.
+ * A agent is given an id by retrieving the local class C @ip.
  * This @ is converted into a string.
  */
 public class Id_Manager {
@@ -26,7 +26,7 @@ public class Id_Manager {
                 while (a.hasMoreElements() && !found) {
                     InetAddress addr = a.nextElement();
                     if (addr != null && (addr.getHostAddress().matches("192.168.*.*")
-                            || addr.getHostAddress().matches("172.*.*.*") )) {
+                            /*|| addr.getHostAddress().matches("172.*.*.*")*/ )) {
                         ip = addr;
                         found = true;
                     }
@@ -35,7 +35,11 @@ public class Id_Manager {
         } catch (SocketException e) {
             System.out.println("No network interface");
         }
-        this.id = ip.getHostAddress();
+        try {
+            this.id = ip.getHostAddress();
+        } catch (NullPointerException e) {
+            //TODO gérer cette exception
+        }
     }
 
     public String getId() { return id; }

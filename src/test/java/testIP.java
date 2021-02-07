@@ -13,6 +13,7 @@ public class testIP {
         catch (SocketException e) {
             System.err.println("Can't figure out broadcast address" + e);
         }
+        if (bd == null) System.out.println("bd nulle");
         System.out.println("--> IP broadcast : " + bd.getHostAddress());
         System.out.println("Comparaison avec les adresses du NetworkManager :");
         System.out.println("--> Net IP           : " + test.getChat().getNetwork().getIp().getHostAddress());
