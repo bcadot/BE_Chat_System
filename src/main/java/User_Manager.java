@@ -33,6 +33,14 @@ public class User_Manager {
             }
             throw new NullPointerException();
     }
+
+    public User getUserFromUsername(String name) throws NullPointerException {
+        for (User u : activeUsers) {
+            if (u.getName().compareTo(name) == 0) return u;
+        }
+        throw new NullPointerException();
+    }
+
     public int getPortfromUsername(String name) throws NullPointerException {
         for (User u : activeUsers) {
             if (u.getName().equals(name)) return u.getRcvPort();

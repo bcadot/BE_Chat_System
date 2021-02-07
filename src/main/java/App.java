@@ -1,7 +1,12 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class App {
     private Agent agent = new Agent();
@@ -12,8 +17,15 @@ public class App {
     private JTextArea pseudo;
     private JList usersList;
     private JTextArea PSEUDOTextArea;
+    User destinationUser;
+
+    JFrame      newFrame    = new JFrame("ChatBox");
+    JButton     sendMessage;
+    JTextField  messageBox;
+    JTextArea   chatBox;
 
     public App() {
+        newFrame.setVisible(false);
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -36,6 +48,8 @@ public class App {
         });
         JListUpdate jl = new JListUpdate(this);
         new Thread(jl).start();
+
+        usersList.addListSelectionListener(new usersListSelectionListener());
     }
 
     public JList getUsersList() {
@@ -56,6 +70,83 @@ public class App {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+    }
+
+    public void display(){
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+
+        JPanel southPanel = new JPanel();
+        southPanel.setBackground(Color.BLUE);
+        southPanel.setLayout(new GridBagLayout());
+
+        messageBox = new JTextField(30);
+        messageBox.requestFocusInWindow();
+
+        sendMessage = new JButton("Send Message");
+        sendMessage.addActionListener(new sendMessageButtonListener());
+
+        chatBox = new JTextArea();
+        chatBox.setEditable(false);
+        chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
+        chatBox.setLineWrap(true);
+
+        mainPanel.add(new JScrollPane(chatBox), BorderLayout.CENTER);
+
+        GridBagConstraints left = new GridBagConstraints();
+        left.anchor = GridBagConstraints.LINE_START;
+        left.fill = GridBagConstraints.HORIZONTAL;
+        left.weightx = 512.0D;
+        left.weighty = 1.0D;
+
+        GridBagConstraints right = new GridBagConstraints();
+        right.insets = new Insets(0, 10, 0, 0);
+        right.anchor = GridBagConstraints.LINE_END;
+        right.fill = GridBagConstraints.NONE;
+        right.weightx = 1.0D;
+        right.weighty = 1.0D;
+
+        southPanel.add(messageBox, left);
+        southPanel.add(sendMessage, right);
+
+        mainPanel.add(BorderLayout.SOUTH, southPanel);
+
+        newFrame.add(mainPanel);
+        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newFrame.setSize(470, 300);
+        newFrame.setVisible(true);
+    }
+
+    class sendMessageButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            if (messageBox.getText().length() < 1) {
+                // do nothing
+            } else if (messageBox.getText().equals(".clear")) {
+                chatBox.setText("Cleared all messages\n");
+                messageBox.setText("");
+            } else {
+                chatBox.append("<" + agent.getPseudo().getPseudonym() + ">:  " + messageBox.getText()
+                        + "\n");
+                messageBox.setText("");
+                try {
+                    agent.getChat().getNetwork().send(new Message(messageBox.getText(), "Chat"), destinationUser);
+                }
+                catch(IOException e){
+                    System.out.println("Error during message sending");
+                }
+            }
+            messageBox.requestFocusInWindow();
+        }
+    }
+
+    class usersListSelectionListener implements ListSelectionListener {
+        @Override
+        public void valueChanged(ListSelectionEvent event) {
+            if(event.getValueIsAdjusting() == false){
+                destinationUser = agent.getUsers().getUserFromUsername((String) usersList.getSelectedValue()) ;
+                display();
+            }
+        }
     }
 
 
