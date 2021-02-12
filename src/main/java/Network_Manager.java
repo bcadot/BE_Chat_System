@@ -2,10 +2,7 @@
  * Manager to send and receive messages via sub classes.
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.*;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -147,6 +144,22 @@ public class Network_Manager {
         System.out.println("--- Client socket closed ---");
         clientSocket.close();
     }
+
+    /*public Message receive(ServerSocket serverSocket, int port){
+        Message msg = null;
+        //Object retrieving
+        try {
+            Socket link = serverSocket.accept();
+            ObjectInputStream inputStream = new ObjectInputStream(link.getInputStream());
+            msg = (Message) inputStream.readObject();
+        } catch (ClassNotFoundException e) {
+            System.err.println("Object received unknown : " + e);
+        } catch (IOException e) {
+            System.err.println("Error during object retrieving : " + e);
+        }
+
+        return msg;
+    }*/
 
     public InetAddress getIp() { return ip; }
     public Chat getChat() { return chat; }

@@ -4,6 +4,7 @@
 
 public class Agent {
     //TODO list attributes
+    protected App app;
     private UDP_Serv udpServ;
     private TCP_Serv tcpServ;
 
@@ -19,7 +20,8 @@ public class Agent {
     //This a Chat class
     private Chat chat;
 
-    public Agent() {
+    public Agent(App app) {
+        this.app=app;
         this.id = new Id_Manager(this);
         this.pseudo = new Pseudonym(this);
         this.users = new User_Manager(this);

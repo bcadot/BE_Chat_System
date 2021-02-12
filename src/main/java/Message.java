@@ -13,8 +13,16 @@ public class Message implements Serializable {
     private String type; //notificationPseudonym | requestValidatePseudonym | answerValidatePseudonym | Chat | File
     private LocalDateTime timestamp;
 
+    public Message (User u, String message, String type) {
+        this.user = u;
+        this.message = message;
+        this.timestamp = LocalDateTime.now();
+        this.type = type;
+    }
+
     public Message(String message, String type){
         this.message = message;
+        this.timestamp = LocalDateTime.now();
         this.type = type;
     }
     public Message(User u) {
@@ -32,10 +40,11 @@ public class Message implements Serializable {
     public User getUser() { return user; }
     @Override
     public String toString() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM, HH:mm");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM, HH:mm");
+        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         if (message == null || message.isEmpty())
-            return /*user.toString() + " : " +*/ "" + " [" + dtf.format(timestamp) + "]";
+            return /*user.toString() + " : " +*/ "" + " [" + timestamp.format(dtf) + "]";
         else
-            return /*user.toString() + " : " +*/ message + " [" + dtf.format(timestamp) + "]";
+            return /*user.toString() + " : " +*/ message + " [" + timestamp.format(dtf) + "]";
     }
 }

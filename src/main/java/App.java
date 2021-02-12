@@ -4,12 +4,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class App {
-    private Agent agent = new Agent();
+    private Agent agent = new Agent(this);
     private JButton button1;
     private JPanel MyPanel;
     private JTextField pseudoInput;
@@ -25,6 +23,8 @@ public class App {
     JTextArea   chatBox;
 
     public App() {
+        agent.getUsers().addUser(new User("192.168.43.223",1234,"test1"));
+        agent.getUsers().addUser(new User("192.168.1.2",1234,"test2"));
         newFrame.setVisible(false);
         button1.addActionListener(new ActionListener() {
             @Override
@@ -50,6 +50,8 @@ public class App {
         new Thread(jl).start();
 
         usersList.addListSelectionListener(new usersListSelectionListener());
+        display();
+        newFrame.setVisible(false);
     }
 
     public JList getUsersList() {
@@ -112,28 +114,32 @@ public class App {
         mainPanel.add(BorderLayout.SOUTH, southPanel);
 
         newFrame.add(mainPanel);
-        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         newFrame.setSize(470, 300);
         newFrame.setVisible(true);
+
+        //TODO Affichage historique anciens messages
+
     }
 
     class sendMessageButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
             if (messageBox.getText().length() < 1) {
-                // do nothing
+                System.out.println("An entry is needed");
             } else if (messageBox.getText().equals(".clear")) {
                 chatBox.setText("Cleared all messages\n");
                 messageBox.setText("");
             } else {
                 chatBox.append("<" + agent.getPseudo().getPseudonym() + ">:  " + messageBox.getText()
                         + "\n");
-                messageBox.setText("");
                 try {
-                    agent.getChat().getNetwork().send(new Message(messageBox.getText(), "Chat"), destinationUser);
+                    agent.getChat().getNetwork().send(new Message(new User (agent.getId().getId(),1234,agent.getPseudo().getPseudonym()),
+                            messageBox.getText(), "Chat"), destinationUser);
                 }
                 catch(IOException e){
                     System.out.println("Error during message sending");
                 }
+                messageBox.setText("");
             }
             messageBox.requestFocusInWindow();
         }
@@ -142,9 +148,15 @@ public class App {
     class usersListSelectionListener implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent event) {
-            if(event.getValueIsAdjusting() == false){
-                destinationUser = agent.getUsers().getUserFromUsername((String) usersList.getSelectedValue()) ;
-                display();
+            if(!event.getValueIsAdjusting()) {
+                if (usersList.getSelectedValue() != null) {
+                    destinationUser = agent.getUsers().getUserFromUsername((String) usersList.getSelectedValue());
+                    newFrame.setVisible(true);
+                    chatBox.setText("");
+                    chatBox.revalidate();
+                    chatBox.repaint();
+                    usersList.setSelectedValue(null,false);
+                }
             }
         }
     }

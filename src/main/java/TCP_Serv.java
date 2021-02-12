@@ -7,33 +7,42 @@ public class TCP_Serv implements Runnable {
 
     private static int PORT = 0;
 
+    private Message receivedMessage = null;
+
     private Network_Manager network;
+
+    public Message getReceivedMessage() { return receivedMessage; }
 
     public TCP_Serv(Network_Manager network) {
         this.network = network;
     }
 
     public void run() {
-        Message msg = null;
-
         //Socket creation
         ServerSocket serverSocket = null;
         try {
             //Socket created with port 0 --> port automatically allocated and retrieved next line
-            serverSocket = new ServerSocket(PORT);
-            PORT = serverSocket.getLocalPort();
+            /*serverSocket = new ServerSocket(PORT);
+            PORT = serverSocket.getLocalPort();*/
+            //TODO
+            serverSocket = new ServerSocket(1234);
+            PORT=1234;
+
             this.network.getChat().getAgent().setTcpPort(PORT);
             System.out.println("--- TCP Server socket created ---");
         }
         catch (IOException e) { System.err.println("!!! Could not create the socket !!!"); }
 
         while (true) {
-
             //Object retrieving
             try {
                 Socket link = serverSocket.accept();
                 ObjectInputStream inputStream = new ObjectInputStream(link.getInputStream());
-                msg = (Message) inputStream.readObject();
+                receivedMessage = (Message) inputStream.readObject();
+
+                displayMessageReceived displayer = new displayMessageReceived(this.network.getChat().getAgent().app, receivedMessage);
+                new Thread(displayer).start();
+
             } catch (ClassNotFoundException e) {
                 System.err.println("Object received unknown : " + e);
             } catch (IOException e) {
@@ -41,8 +50,8 @@ public class TCP_Serv implements Runnable {
             }
 
             //Message display
-            if (msg != null) {
-                System.out.println(msg.toString());
+            if (receivedMessage != null) {
+                System.out.println(receivedMessage.toString());
             }
 
         }

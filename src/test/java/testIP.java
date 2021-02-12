@@ -3,7 +3,7 @@ import java.net.SocketException;
 
 public class testIP {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Agent test = new Agent();
         System.out.println("--> IP           : " + test.getId().getId());
         InetAddress bd = null;
@@ -18,5 +18,5 @@ public class testIP {
         System.out.println("Comparaison avec les adresses du NetworkManager :");
         System.out.println("--> Net IP           : " + test.getChat().getNetwork().getIp().getHostAddress());
         System.out.println("--> Net IP broadcast : " + test.getChat().getNetwork().getBroadcastip().getHostAddress());
-    }
+    }*/
 }

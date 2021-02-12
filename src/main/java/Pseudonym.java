@@ -29,7 +29,7 @@ public class Pseudonym {
         if (pseudo.isEmpty()) throw new NullPointerException();
         if (pseudo.equals(this.pseudonym)) return false;
         boolean pseudoChanged = false;
-        if (validatePseudonym(pseudo)) {    //TODO gérer la notification même quand pseudo non valide
+        if (validatePseudonym(pseudo)) {
             pseudonym = pseudo;
             pseudoChanged = true;
             notifyUsers();

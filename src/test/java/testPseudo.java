@@ -1,6 +1,6 @@
 public class testPseudo {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Agent ben = new Agent();
         //TODO entrer l'ip manuellement car erreur parfois car multiples interfaces rezo
         System.out.println("Avant changement :");
@@ -11,7 +11,7 @@ public class testPseudo {
         else
             System.out.println("Pseudo déja utilisé");
         System.out.println("-->" + ben.getPseudo().getPseudonym() + " ; " + ben.getId().getId());
-    }
+    }*/
 
 
 }
