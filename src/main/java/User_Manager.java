@@ -11,7 +11,7 @@ public class User_Manager {
     public void addUser(User u) {
         activeUsers.add(u);
     }
-    //public void addUser(String ip, int port, String name) { activeUsers.add(new Agent(ip, port, name)); }
+
     public void delUser(User u) {
         try { activeUsers.remove(u); }
         catch (NullPointerException e) { System.out.println("Agent not found"); }

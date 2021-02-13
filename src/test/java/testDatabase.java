@@ -1,6 +1,6 @@
 public class testDatabase {
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         Agent test = new Agent();
         System.out.println("--> IP           : " + test.getId().getId());
         String dest = "192.168.69.69";
@@ -22,5 +22,5 @@ public class testDatabase {
         test.getChat().getData().insert(dest, nullmsg);
         //Fetch
         test.getChat().getData().fetch(dest);
-    }*/
+    }
 }

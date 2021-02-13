@@ -31,7 +31,6 @@ public class App {
 
     public App() {
         agent.getUsers().addUser(new User("192.168.43.223",1234,"test1"));
-        //agent.getUsers().addUser(new User("192.168.1.2",1234,"test2"));
         newFrame.setVisible(false);
         button1.addActionListener(new ActionListener() {
             @Override
@@ -72,6 +71,15 @@ public class App {
         JFrame frame = new JFrame("App");
         frame.setContentPane(new App().MyPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // get the screen size as a java dimension
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // get 2/3 of the height, and 2/3 of the width
+        int height = screenSize.height * 2 / 3;
+        int width = screenSize.width * 2 / 3;
+
+        // set the jframe height and width
+        frame.setPreferredSize(new Dimension(width, height));
         frame.pack();
         frame.setVisible(true);
     }
@@ -126,9 +134,7 @@ public class App {
         newFrame.add(mainPanel);
         newFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         newFrame.setSize(470, 300);
-
-        //TODO Affichage historique anciens messages
-
+        newFrame.setVisible(true);
     }
 
     class sendMessageButtonListener implements ActionListener {
@@ -178,6 +184,15 @@ public class App {
                     chatBox.setText("");
                     chatBox.revalidate();
                     chatBox.repaint();
+
+                    //Historique
+                    ArrayList<Message> history = agent.getChat().getData().fetch(destinationUser.getIp());
+                    if (history != null) {
+                        history.forEach(msg -> chatBox.append(msg.toString() + "\n"));
+                    }
+                    else
+                        System.out.println("!!! Historique nul !!!");
+                    //TODO
                     usersList.setSelectedValue(null,false);
                 }
             }

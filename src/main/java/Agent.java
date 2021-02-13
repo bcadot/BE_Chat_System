@@ -33,15 +33,23 @@ public class Agent {
         Thread recep = new Thread(tcpServ);
         recep.start();
     }
-    /*
-    public void startSession(Agent user) {
-        Chat chat = new Chat(user);
+
+    /**
+     * This constructor is only used for testing. Do not use it for the main application.
+     */
+    public Agent() {
+        this.id = new Id_Manager(this);
+        this.pseudo = new Pseudonym(this);
+        this.users = new User_Manager(this);
+        this.chat = new Chat(this);
+        this.udpServ = chat.getNetwork().getBdServer();
+        Thread wait_for_answer = new Thread(udpServ);
+        wait_for_answer.start();
+        this.tcpServ = chat.getNetwork().getTcpServer();
+        Thread recep = new Thread(tcpServ);
+        recep.start();
     }
 
-    public void endSession() {
-        //fin ack
-    }
-    */
     public int getTcpPort() { return tcpPort; }
     public User_Manager getUsers() { return users; }
     public Chat getChat() { return chat; }

@@ -41,10 +41,16 @@ public class Message implements Serializable {
     @Override
     public String toString() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM, HH:mm");
-        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        if (message == null || message.isEmpty())
-            return /*user.toString() + " : " +*/ "" + " [" + timestamp.format(dtf) + "]";
-        else
-            return /*user.toString() + " : " +*/ message + " [" + timestamp.format(dtf) + "]";
+        if (user != null) {
+            if (message == null || message.isEmpty())
+                return user.toString() + " : " + "" + " [" + timestamp.format(dtf) + "]";
+            else
+                return user.toString() + " : " + message + " [" + timestamp.format(dtf) + "]";
+        } else {
+            if (message == null || message.isEmpty())
+                return "" + " [" + timestamp.format(dtf) + "]";
+            else
+                return message + " [" + timestamp.format(dtf) + "]";
+        }
     }
 }

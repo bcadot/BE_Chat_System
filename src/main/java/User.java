@@ -26,7 +26,7 @@ public class User implements Serializable {
     public void setIp(String ip) { this.ip = ip; }
     @Override
     public String toString() {
-        return "(User " + ip + " = " + name + " on port " + rcvPort + ")";
+        return "(" + ip + ") - " + name;
     }
 
 }

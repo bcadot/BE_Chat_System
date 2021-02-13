@@ -114,7 +114,7 @@ public class Network_Manager {
      * @param user msg will be sent to this user
      * @throws IOException when transmission error
      */
-    public void send(Message msg, User user) throws IOException {   //TODO ajouter le Data_Manager.insert()
+    public void send(Message msg, User user) throws IOException {
 
         //Get ip and port from user
         String ip = null;
@@ -132,11 +132,12 @@ public class Network_Manager {
             System.out.println("--- Client socket created ---");
         } catch (IOException e) { System.err.println("!!! Could not create the socket !!!"); }
 
-        //Object writing
+        //Object writing, inserted in the database after that
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             outputStream.writeObject(msg);
             outputStream.close();
+            this.chat.getData().insert(user.getIp(), msg);
         } catch (IOException e) {
             System.err.println("Error during object writing : " + e);
         }
