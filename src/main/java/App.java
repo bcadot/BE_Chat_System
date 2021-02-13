@@ -1,10 +1,14 @@
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.io.File;
 
 public class App {
     private Agent agent = new Agent(this);
@@ -15,16 +19,19 @@ public class App {
     private JTextArea pseudo;
     private JList usersList;
     private JTextArea PSEUDOTextArea;
+    private LocalDateTime timestamp;
+
     User destinationUser;
 
     JFrame      newFrame    = new JFrame("ChatBox");
     JButton     sendMessage;
+    JButton     sendFile;
     JTextField  messageBox;
     JTextArea   chatBox;
 
     public App() {
         agent.getUsers().addUser(new User("192.168.43.223",1234,"test1"));
-        agent.getUsers().addUser(new User("192.168.1.2",1234,"test2"));
+        //agent.getUsers().addUser(new User("192.168.1.2",1234,"test2"));
         newFrame.setVisible(false);
         button1.addActionListener(new ActionListener() {
             @Override
@@ -51,7 +58,6 @@ public class App {
 
         usersList.addListSelectionListener(new usersListSelectionListener());
         display();
-        newFrame.setVisible(false);
     }
 
     public JList getUsersList() {
@@ -88,6 +94,9 @@ public class App {
         sendMessage = new JButton("Send Message");
         sendMessage.addActionListener(new sendMessageButtonListener());
 
+        sendFile = new JButton("Send File");
+        sendFile.addActionListener(new sendFileButtonListener());
+
         chatBox = new JTextArea();
         chatBox.setEditable(false);
         chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
@@ -110,13 +119,13 @@ public class App {
 
         southPanel.add(messageBox, left);
         southPanel.add(sendMessage, right);
+        southPanel.add(sendFile, right);
 
         mainPanel.add(BorderLayout.SOUTH, southPanel);
 
         newFrame.add(mainPanel);
         newFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         newFrame.setSize(470, 300);
-        newFrame.setVisible(true);
 
         //TODO Affichage historique anciens messages
 
@@ -130,8 +139,10 @@ public class App {
                 chatBox.setText("Cleared all messages\n");
                 messageBox.setText("");
             } else {
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM, HH:mm");
+                timestamp = LocalDateTime.now();
                 chatBox.append("<" + agent.getPseudo().getPseudonym() + ">:  " + messageBox.getText()
-                        + "\n");
+                        + " [" + timestamp.format(dtf) + "]" + "\n");
                 try {
                     agent.getChat().getNetwork().send(new Message(new User (agent.getId().getId(),1234,agent.getPseudo().getPseudonym()),
                             messageBox.getText(), "Chat"), destinationUser);
@@ -142,6 +153,18 @@ public class App {
                 messageBox.setText("");
             }
             messageBox.requestFocusInWindow();
+        }
+    }
+
+    class sendFileButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent event){
+            JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+            int returnValue = jfc.showOpenDialog(null);
+
+            if(returnValue == JFileChooser.APPROVE_OPTION){
+                File selectedFile = jfc.getSelectedFile();
+                System.out.println(selectedFile.getAbsolutePath());
+            }
         }
     }
 

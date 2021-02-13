@@ -40,6 +40,8 @@ public class TCP_Serv implements Runnable {
                 ObjectInputStream inputStream = new ObjectInputStream(link.getInputStream());
                 receivedMessage = (Message) inputStream.readObject();
 
+                this.network.getChat().getAgent().app.destinationUser = receivedMessage.getUser();
+                this.network.getChat().getAgent().app.chatBox.setVisible(true);
                 displayMessageReceived displayer = new displayMessageReceived(this.network.getChat().getAgent().app, receivedMessage);
                 new Thread(displayer).start();
 

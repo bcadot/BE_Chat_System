@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class displayMessageReceived implements Runnable {
@@ -14,6 +16,6 @@ public class displayMessageReceived implements Runnable {
     public void run() {
         if (app.destinationUser.getName().equals(msg.getUser().getName()))
             this.app.chatBox.append("<" + msg.getUser().getName() +
-                 ">:  " + msg.toString() + "\n");
+                    ">:  " + msg.toString() + "\n");
     }
 }
