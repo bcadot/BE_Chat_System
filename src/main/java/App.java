@@ -9,7 +9,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.File;
+import java.util.ArrayList;
 
+/**
+ * Provides the GUI
+ */
 public class App {
     private Agent agent = new Agent(this);
     private JButton button1;
@@ -30,7 +34,6 @@ public class App {
     JTextArea   chatBox;
 
     public App() {
-        agent.getUsers().addUser(new User("192.168.43.223",1234,"test1"));
         newFrame.setVisible(false);
         button1.addActionListener(new ActionListener() {
             @Override
@@ -74,9 +77,9 @@ public class App {
         // get the screen size as a java dimension
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        // get 2/3 of the height, and 2/3 of the width
-        int height = screenSize.height * 2 / 3;
-        int width = screenSize.width * 2 / 3;
+        // get 1/3 of the height, and 1/3 of the width
+        int height = screenSize.height * 1 / 3;
+        int width = screenSize.width * 1 / 3;
 
         // set the jframe height and width
         frame.setPreferredSize(new Dimension(width, height));
@@ -134,7 +137,6 @@ public class App {
         newFrame.add(mainPanel);
         newFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         newFrame.setSize(470, 300);
-        newFrame.setVisible(true);
     }
 
     class sendMessageButtonListener implements ActionListener {
@@ -154,7 +156,8 @@ public class App {
                             messageBox.getText(), "Chat"), destinationUser);
                 }
                 catch(IOException e){
-                    System.out.println("Error during message sending");
+                    System.out.println("Error during text message sending");
+                    //TODO peut-être ajouter un message dans la chatbox comme quoi le message s'est pas envoyé
                 }
                 messageBox.setText("");
             }
@@ -162,14 +165,28 @@ public class App {
         }
     }
 
+    //TODO implémenter envoi fichiers
     class sendFileButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
             JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
             int returnValue = jfc.showOpenDialog(null);
 
-            if(returnValue == JFileChooser.APPROVE_OPTION){
+            if (returnValue == JFileChooser.APPROVE_OPTION){
                 File selectedFile = jfc.getSelectedFile();
-                System.out.println(selectedFile.getAbsolutePath());
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM, HH:mm");
+                timestamp = LocalDateTime.now();
+                chatBox.append("<" + agent.getPseudo().getPseudonym() + ">:  " + selectedFile.getName()
+                        + " [" + timestamp.format(dtf) + "]" + "\n");
+
+                try {
+
+                    agent.getChat().getNetwork().sendFile(selectedFile, destinationUser);
+                }
+                catch(IOException e){
+                    System.out.println("Error during file message sending");
+                    //TODO same as sendMessageButtonListener
+                }
+
             }
         }
     }
@@ -190,9 +207,6 @@ public class App {
                     if (history != null) {
                         history.forEach(msg -> chatBox.append(msg.toString() + "\n"));
                     }
-                    else
-                        System.out.println("!!! Historique nul !!!");
-                    //TODO
                     usersList.setSelectedValue(null,false);
                 }
             }

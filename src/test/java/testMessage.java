@@ -4,12 +4,12 @@ public class testMessage {
 
     public static void main(String[] args) {
         Agent ben = new Agent();
+
         /*
         Choix d'un pseudonyme aléatoire (unique sauf si malchance)
         a pour but d'activer NotifyUsers() et ainsi de remplir
         la liste activeUsers pour l'agent
         */
-
         System.out.println("Avant changement :");
         System.out.println("-->" + ben.getPseudo().getPseudonym() + " ; " + ben.getId().getId());
         System.out.println("Requête changement de pseudo");

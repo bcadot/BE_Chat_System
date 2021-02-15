@@ -1,7 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * Provides a way to manage known users.
+ */
 public class User_Manager {
-    private ArrayList<User> activeUsers = new ArrayList<User>();
+    private ArrayList<User> activeUsers = new ArrayList<>();
     private Agent agent;
 
     public User_Manager(Agent a) {
@@ -10,11 +13,6 @@ public class User_Manager {
 
     public void addUser(User u) {
         activeUsers.add(u);
-    }
-
-    public void delUser(User u) {
-        try { activeUsers.remove(u); }
-        catch (NullPointerException e) { System.out.println("Agent not found"); }
     }
 
     public void delUserfromIP(String ip) {
@@ -28,10 +26,10 @@ public class User_Manager {
         return false;
     }
     public String getIPfromUsername(String name) throws NullPointerException {
-            for (User u : activeUsers) {
-                if (u.getName().compareTo(name) == 0) return u.getIp();
-            }
-            throw new NullPointerException();
+        for (User u : activeUsers) {
+            if (u.getName().compareTo(name) == 0) return u.getIp();
+        }
+        throw new NullPointerException();
     }
 
     public User getUserFromUsername(String name) throws NullPointerException {

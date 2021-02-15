@@ -25,20 +25,19 @@ public class Id_Manager {
                 Enumeration<InetAddress> a = e.getInetAddresses();
                 while (a.hasMoreElements() && !found) {
                     InetAddress addr = a.nextElement();
-                    if (addr != null && (addr.getHostAddress().matches("192.168.*.*")
-                            /*|| addr.getHostAddress().matches("172.*.*.*")*/ )) {
+                    if (addr != null && (addr.getHostAddress().matches("192.168.*.*"))) {
                         ip = addr;
                         found = true;
                     }
                 }
             }
         } catch (SocketException e) {
-            System.out.println("No network interface");
+            System.err.println("No network interface");
         }
         try {
             this.id = ip.getHostAddress();
         } catch (NullPointerException e) {
-            //TODO gérer cette exception
+            System.err.println("IP vide : " + e);
         }
     }
 

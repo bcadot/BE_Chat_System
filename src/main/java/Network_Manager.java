@@ -1,13 +1,10 @@
+import java.io.*;
+import java.net.*;
+import java.util.Enumeration;
+
 /**
  * Manager to send and receive messages via sub classes.
  */
-
-import java.io.*;
-import java.net.*;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Enumeration;
-
 public class Network_Manager {
     private InetAddress ip;     //TODO voir si vraiment utile
     private InetAddress broadcastip;
@@ -17,7 +14,7 @@ public class Network_Manager {
     private TCP_Serv tcpServer;
 
     /**
-     * Default constructor, retrieve ip with Id_Manager and broadcast ip.
+     * Default constructor, retrieves ip with Id_Manager and broadcast ip.
      */
     Network_Manager(Chat c){
         this.chat = c;
@@ -115,7 +112,6 @@ public class Network_Manager {
      * @throws IOException when transmission error
      */
     public void send(Message msg, User user) throws IOException {
-
         //Get ip and port from user
         String ip = null;
         int port = -1;
@@ -129,38 +125,38 @@ public class Network_Manager {
         Socket clientSocket = new Socket();
         try{
             clientSocket = new Socket(InetAddress.getByName(ip), port);
-            System.out.println("--- Client socket created ---");
-        } catch (IOException e) { System.err.println("!!! Could not create the socket !!!"); }
+        } catch (IOException e) {
+            System.err.println("!!! Could not create the socket, distant user is probably disconnected !!!");
+            this.chat.getAgent().getUsers().delUserfromIP(ip);
+        }
 
-        //Object writing, inserted in the database after that
+        //Object writing, inserted in the database
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             outputStream.writeObject(msg);
             outputStream.close();
             this.chat.getData().insert(user.getIp(), msg);
         } catch (IOException e) {
-            System.err.println("Error during object writing : " + e);
+            System.err.println("!!! Error during object writing, distant user is probably disconnected !!!");
+            if (this.chat.getAgent().getUsers().isknown(ip))
+                this.chat.getAgent().getUsers().delUserfromIP(ip);
         }
-
-        System.out.println("--- Client socket closed ---");
         clientSocket.close();
     }
 
-    /*public Message receive(ServerSocket serverSocket, int port){
-        Message msg = null;
-        //Object retrieving
-        try {
-            Socket link = serverSocket.accept();
-            ObjectInputStream inputStream = new ObjectInputStream(link.getInputStream());
-            msg = (Message) inputStream.readObject();
-        } catch (ClassNotFoundException e) {
-            System.err.println("Object received unknown : " + e);
-        } catch (IOException e) {
-            System.err.println("Error during object retrieving : " + e);
-        }
+    /**
+     * Send a file over TCP to a provided user
+     *
+     * @param file file to send
+     * @param user msg will be sent to this user
+     * @throws IOException when transmission error
+     */
+    public void sendFile(File file, User user) throws IOException {
+        Message filemsg = new Message(new User(this.getChat().getAgent().getId().getId(),
+                1234, this.getChat().getAgent().getPseudo().getPseudonym()), file);
+        this.send(filemsg, user);
+    }
 
-        return msg;
-    }*/
 
     public InetAddress getIp() { return ip; }
     public Chat getChat() { return chat; }

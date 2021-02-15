@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class testDatabase {
 
     public static void main(String[] args) {
@@ -21,6 +23,9 @@ public class testDatabase {
         Message emptymsg = new Message(emptystring);
         test.getChat().getData().insert(dest, nullmsg);
         //Fetch
-        test.getChat().getData().fetch(dest);
+        ArrayList<Message> history = test.getChat().getData().fetch(dest);
+        for (Message msg : history) {
+            System.out.println(msg);
+        }
     }
 }

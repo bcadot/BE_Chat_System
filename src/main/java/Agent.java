@@ -14,12 +14,16 @@ public class Agent {
     private Pseudonym pseudo;
     private User_Manager users;
 
-    //The following attributes are determined by the previous managers and will be the ones used.
+    //The following attributes are updated when the agent is initialized
     private int tcpPort = -1;   //updated when TCP_Serv starts
 
     //This a Chat class
     private Chat chat;
 
+    /**
+     * This is the main constructor.
+     * You need to provide an App for the GUI.
+     */
     public Agent(App app) {
         this.app=app;
         this.id = new Id_Manager(this);

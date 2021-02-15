@@ -1,5 +1,8 @@
 import java.io.Serializable;
 
+/**
+ * Represents a user.
+ */
 public class User implements Serializable {
 
     private String ip;
@@ -23,7 +26,6 @@ public class User implements Serializable {
     public String getIp() { return ip; }
     public int getRcvPort() { return rcvPort; }
     public String getName() { return name; }
-    public void setIp(String ip) { this.ip = ip; }
     @Override
     public String toString() {
         return "(" + ip + ") - " + name;

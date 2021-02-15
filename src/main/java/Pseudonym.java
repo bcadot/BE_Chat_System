@@ -18,7 +18,7 @@ public class Pseudonym {
     }
 
     /**
-     * Set pseudonym.
+     * Setw pseudonym.
      *
      * @param p The pseudonym you want
      * @return boolean: true if pseudo change, false if not
@@ -29,7 +29,7 @@ public class Pseudonym {
         if (pseudo.isEmpty()) throw new NullPointerException();
         if (pseudo.equals(this.pseudonym)) return false;
         boolean pseudoChanged = false;
-        if (validatePseudonym(pseudo)) {    //TODO gérer la notification même quand pseudo non valide
+        if (validatePseudonym(pseudo)) {
             pseudonym = pseudo;
             pseudoChanged = true;
             notifyUsers();
@@ -42,7 +42,7 @@ public class Pseudonym {
     }
 
     /**
-     * Check whether the given pseudonym is valid or not.
+     * Checks whether the given pseudonym is valid or not.
      *
      * @param pseudonym the pseudonym you want to check
      * @return true if the given pseudonym is valid
@@ -58,14 +58,6 @@ public class Pseudonym {
             System.err.println("Error during broadcast transmission");
         }
 
-        /*
-        try{
-            Thread.sleep(5000);
-        }catch(InterruptedException e){
-            System.out.println("Thread interrupted");
-        }
-        */
-
         for (int i = 0; i < 50000; i++) {
             System.out.print("");
         }
@@ -74,10 +66,9 @@ public class Pseudonym {
     }
 
     /**
-     * Notify other active users that the current agent has been changed.
+     * Notifies other active users that the current agent has been changed.
      */
     public void notifyUsers(){
-        System.out.println("Méthode notifyUsers");
         Message newUser = new Message(new User(this.agent.getId().getId(),
                 this.agent.getTcpPort(),
                 this.getPseudonym()));
@@ -85,7 +76,6 @@ public class Pseudonym {
 
         //Send pseudo in broadcast UDP
         try {
-            System.out.println("Broadcast de l'user");
             net.broadcastMessage(newUser);
         } catch (IOException e) {
             System.out.println("Error during broadcast transmission");

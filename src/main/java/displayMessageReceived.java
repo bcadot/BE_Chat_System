@@ -10,7 +10,6 @@ public class displayMessageReceived implements Runnable {
 
     public void run() {
         if (app.destinationUser.getName().equals(msg.getUser().getName()))
-            this.app.chatBox.append("<" + msg.getUser().getName() +
-                    ">:  " + msg.toString() + "\n");
+            this.app.chatBox.append(msg.toString() + "\n");
     }
 }

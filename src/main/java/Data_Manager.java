@@ -1,20 +1,23 @@
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
+/**
+ * Used to get a connection a database and perform operations on it.
+ */
 public class Data_Manager {
     private Chat chat;
-    private Connection con = null;          //TODO penser à fermer la connection quand on ferme l'agent
+    private Connection con = null;          //TODO penser à fermer la connexion quand on ferme l'agent
 
     public Data_Manager(Chat c) {
         this.chat = c;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://192.168.56.101:3306/chat_system?useSSL=false";
-            String user = "poo";
-            String password = "projetpoo";
+            String[] dbinfos = getDBinfo();
+            String url = dbinfos[0];
+            String user = dbinfos[1];
+            String password = dbinfos[2];
             this.con = DriverManager.getConnection(url, user, password);
             System.out.println("! Connection to database is successful !");
         } catch (ClassNotFoundException e) {
@@ -25,7 +28,7 @@ public class Data_Manager {
     }
 
     /**
-     * Fetch all messages between you and the recipient and returns it in a ArrayList of Message.
+     * Fetches all messages between you and the recipient and returns it in a ArrayList of Message.
      *
      * @param dest The recipient
      * @return ArrayList(Message)
@@ -42,7 +45,6 @@ public class Data_Manager {
                 Blob blob = res.getBlob("msg");
                 ObjectInputStream ois = new ObjectInputStream(blob.getBinaryStream());
                 Message msg = (Message) ois.readObject();
-                System.out.println(msg.toString());
                 history.add(history.size(), msg);
             }
             statement.close();
@@ -77,4 +79,24 @@ public class Data_Manager {
             System.err.println("insert error" + e);
         }
     }
+
+    public String[] getDBinfo() {
+        int i = 0;
+        String[] dbinfos = new String[3];
+        try {
+            FileInputStream fis=new FileInputStream("database_setup.txt");
+            Scanner sc=new Scanner(fis);
+            while (sc.hasNextLine() && i<=3) {
+                dbinfos[i] = sc.nextLine();
+                i++;
+            }
+            sc.close();
+        }
+        catch(IOException e) {
+            System.out.println("Le fichier database_setup.txt n'existe pas ou n'est pas au bon endroit.\n" +
+                    "Se référer au manuel d'utilisation.");
+        }
+        return dbinfos;
+    }
+
 }
